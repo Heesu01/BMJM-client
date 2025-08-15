@@ -11,7 +11,19 @@ export default defineConfig({
     tailwindcss(),
     svgr({
       svgrOptions: {
-        plugins: ['@svgr/plugin-svgo', '@svgr/plugin-jsx'],
+        svgo: true,
+        svgoConfig: {
+          plugins: [
+            {
+              name: 'preset-default',
+              params: { overrides: { removeViewBox: false } },
+            },
+          ],
+        },
+        replaceAttrValues: {
+          '#000': 'currentColor',
+          '#000000': 'currentColor',
+        },
       },
     }),
   ],

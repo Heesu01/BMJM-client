@@ -1,8 +1,6 @@
-// widgets/home/RecommendedByKeyword/RecommendedByKeyword.stories.tsx
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import RecommendedByKeyword from './RecommendedByKeyword'
 
-// 카드 아이템 타입
 type Item = {
   id: string
   title: string
@@ -10,10 +8,8 @@ type Item = {
   imageUrl: string
 }
 
-// 키워드
 const keywords = ['전통시장', '둘레길', '해운대', '국밥투어', '카페거리']
 
-// 키워드별 아이템 (any 금지)
 const itemsByKeyword: Record<string, Item[]> = {
   전통시장: [
     {
@@ -103,7 +99,7 @@ type Story = StoryObj<typeof RecommendedByKeyword>
 export const Default: Story = {
   args: {
     keywords: [...keywords],
-    itemsByKeyword, // ✅ any 제거
+    itemsByKeyword,
   },
 }
 

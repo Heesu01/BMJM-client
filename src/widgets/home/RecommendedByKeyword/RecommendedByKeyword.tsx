@@ -127,7 +127,10 @@ export default function RecommendedByKeyword({
       <div className="no-scrollbar -mx-[20px] overflow-x-auto px-[20px]">
         <div className="flex snap-x snap-mandatory gap-[10px]">
           {items.map((item) => (
-            <article className="relative w-[140px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-black/5">
+            <article
+              key={item.id}
+              className="relative w-[140px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-black/5"
+            >
               <div className="pointer relative h-[157px] w-full cursor-pointer">
                 <img
                   src={item.imageUrl}

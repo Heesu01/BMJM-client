@@ -10,7 +10,10 @@ export default function HomeHeader({
   className = '',
 }: HeaderProps) {
   return (
-    <header className={`bg-[#F9F9F9] ${className}`}>
+    <header
+      className={`fixed inset-x-0 top-0 z-50 bg-[#F9F9F9] ${className}`}
+      style={{ paddingTop: 'env(safe-area-inset-top)' }}
+    >
       <div className="mx-auto flex h-[75px] items-center justify-between px-[20px]">
         <Logo className="w-auto" />
         {showBell ? (

@@ -1,6 +1,7 @@
 import { HomeHeader } from '@/shared/HomeHeader'
 import { BottomTabBar } from '@/shared/BottomTabBar'
 import { HeroCard } from '@/widgets/home/HeroCard'
+import { RecommendedByKeyword } from '@/widgets/home/RecommendedByKeyword'
 
 export default function HomePage() {
   return (
@@ -9,6 +10,7 @@ export default function HomePage() {
 
       <main className="mx-auto px-[20px]">
         <HeroCard isLoggedIn={false} />
+        <RecommendedByKeyword />
       </main>
 
       <BottomTabBar />

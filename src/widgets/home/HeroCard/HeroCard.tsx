@@ -37,7 +37,7 @@ export default function HeroCard({
   const cardHeight = isLoggedIn ? 260 : 218
   return (
     <section
-      className={`relative mb-[30px] w-full max-w-[500px] ${className} m-auto`}
+      className={`relative w-full max-w-[500px] ${className} m-auto`}
       style={{ height: cardHeight }}
     >
       <HeroCardBg

@@ -82,6 +82,10 @@
     font-size: 20px;
     font-weight: 600;
   }
+  .text-semi16 {
+    font-size: 16px;
+    font-weight: 600;
+  }
   .text-semi14 {
     font-size: 14px;
     font-weight: 600;
@@ -115,6 +119,15 @@
     font-family: 'BusanBada';
     font-size: 20px;
     font-weight: 500;
+  }
+
+  /* 스크롤 숨기기*/
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
   }
 }
 

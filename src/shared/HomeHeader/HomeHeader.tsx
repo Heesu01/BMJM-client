@@ -11,7 +11,7 @@ export default function HomeHeader({
 }: HeaderProps) {
   return (
     <header className={`bg-[#F9F9F9] ${className}`}>
-      <div className="mx-auto flex h-14 items-center justify-between px-[20px]">
+      <div className="mx-auto flex h-[75px] items-center justify-between px-[20px]">
         <Logo className="w-auto" />
         {showBell ? (
           <span

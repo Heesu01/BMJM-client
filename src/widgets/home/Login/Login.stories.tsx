@@ -1,10 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
 import { MemoryRouter } from 'react-router-dom'
-import HeroCard from './HeroCard'
+import Login from './Login'
 
-const meta: Meta<typeof HeroCard> = {
-  title: 'Widgets/Home/HeroCard',
-  component: HeroCard,
+const meta: Meta<typeof Login> = {
+  title: 'Widgets/home/Login',
+  component: Login,
   parameters: { layout: 'centered' },
   decorators: [
     (Story) => (
@@ -16,20 +16,10 @@ const meta: Meta<typeof HeroCard> = {
     ),
   ],
   argTypes: {
-    isLoggedIn: { control: 'boolean' },
-  },
-  args: {
-    isLoggedIn: false,
+    onKakaoLogin: { action: 'kakao login click' },
   },
 }
 export default meta
-
 type Story = StoryObj<typeof meta>
 
-export const LoggedOut: Story = {
-  args: { isLoggedIn: false },
-}
-
-export const LoggedIn: Story = {
-  args: { isLoggedIn: true },
-}
+export const Default: Story = { args: {} }

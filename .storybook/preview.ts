@@ -1,8 +1,18 @@
 import type { Preview } from '@storybook/react-vite'
-import '../src/index.css'
+import '../src/app/index.css'
 
 const preview: Preview = {
   parameters: {
+    layout: 'fullscreen',
+    backgrounds: {
+      default: 'App',
+      values: [
+        { name: 'App', value: '#F9F9F9' },
+        { name: 'White', value: '#FFFFFF' },
+        { name: 'Gray', value: '#EBEBEB' },
+        { name: 'Dark', value: '#0F172A' },
+      ],
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

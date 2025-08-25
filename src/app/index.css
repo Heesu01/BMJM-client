@@ -24,8 +24,7 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
-
-  font-synthesis: none;
+  /* font-synthesis: none; */
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -49,6 +48,7 @@
   --color-gray-40: #b5b5b5;
   --color-gray-20: #ebebeb;
   --color-gray-100: #ffffff;
+  --animate-homeBg: #f9f9f9;
 }
 
 @layer utilities {
@@ -82,16 +82,36 @@
     font-size: 20px;
     font-weight: 600;
   }
+  .text-semi16 {
+    font-size: 16px;
+    font-weight: 600;
+  }
   .text-semi14 {
     font-size: 14px;
     font-weight: 600;
+  }
+  .text-medium20 {
+    font-size: 20px;
+    font-weight: 500;
+  }
+  .text-medium18 {
+    font-size: 18px;
+    font-weight: 500;
   }
   .text-medium16 {
     font-size: 16px;
     font-weight: 500;
   }
+  .text-medium14 {
+    font-size: 14px;
+    font-weight: 500;
+  }
   .text-medium12 {
     font-size: 12px;
+    font-weight: 500;
+  }
+  .text-medium10 {
+    font-size: 10px;
     font-weight: 500;
   }
   .text-regular14 {
@@ -100,7 +120,54 @@
   }
 
   .text-busan {
+    font-family: 'BusanBada';
     font-size: 20px;
     font-weight: 500;
+  }
+
+  /* 스크롤 숨기기*/
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer utilities {
+  .tab-cutout {
+    --btn: 64px;
+    --gap: 6px;
+    --ring: 0px;
+    --notch-w: 8px;
+    --lift: 0px;
+
+    --notch-y: calc(
+      -1 * ((var(--btn) / 2) + var(--gap) + var(--ring) - var(--lift))
+    );
+    --notch-r: calc((var(--btn) / 2) + var(--gap) + var(--ring));
+
+    -webkit-mask: radial-gradient(
+      circle at 50% var(--notch-y),
+      #000 0 calc(var(--notch-r) - var(--notch-w)),
+      transparent calc(var(--notch-r) - var(--notch-w))
+        calc(var(--notch-r) + var(--notch-w)),
+      #000 calc(var(--notch-r) + var(--notch-w)) 100%
+    );
+    mask: radial-gradient(
+      circle at 50% var(--notch-y),
+      #000 0 calc(var(--notch-r) - var(--notch-w)),
+      transparent calc(var(--notch-r) - var(--notch-w))
+        calc(var(--notch-r) + var(--notch-w)),
+      #000 calc(var(--notch-r) + var(--notch-w)) 100%
+    );
+  }
+
+  .center-fab {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    top: calc(-1 * ((var(--btn) / 2) + var(--gap))); /* 바 윗면 기준 위로 */
   }
 }

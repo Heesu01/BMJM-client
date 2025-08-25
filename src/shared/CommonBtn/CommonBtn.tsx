@@ -18,7 +18,7 @@ export default function CommonBtn({
       type="button"
       disabled={disabled}
       onClick={onClick}
-      className={`font-medium16 inline-flex h-[46px] items-center justify-center rounded-[8px] select-none ${disabled ? 'bg-gray-40 cursor-not-allowed' : ''} ${className}`}
+      className={`text-medium16 inline-flex h-[46px] items-center justify-center rounded-[8px] select-none ${disabled ? 'bg-gray-40 cursor-not-allowed' : ''} ${className}`}
     >
       {children}
     </button>

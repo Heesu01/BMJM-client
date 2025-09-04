@@ -3,7 +3,7 @@ import { IoSearch } from 'react-icons/io5'
 type Props = {
   value: string
   onChange: (v: string) => void
-  tabs: { key: string; label: string }[]
+  tabs: ReadonlyArray<{ key: string; label: string }>
   active: string
   onTab: (key: string) => void
 }

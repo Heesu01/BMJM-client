@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { getPlaceById } from '@/entities/map'
 import type { Place } from '@/entities/map'
 import PlaceHeader from '@/widgets/map/PlaceDetail/PlaceHeader'
@@ -11,12 +11,14 @@ import ReviewTab from '@/widgets/map/PlaceDetail/ReviewTab'
 export default function PlaceDetailPage() {
   const navigate = useNavigate()
   const { placeId = '' } = useParams()
-  const [place, setPlace] = useState<Place | null>(null)
+  const loc = useLocation() as { state?: { place?: Place } }
+  const [place, setPlace] = useState<Place | null>(loc.state?.place ?? null)
   const [tab, setTab] = useState<'home' | 'menu' | 'review'>('home')
 
   useEffect(() => {
+    if (loc.state?.place) return
     getPlaceById(placeId).then(setPlace)
-  }, [placeId])
+  }, [placeId, loc.state?.place])
 
   if (!place) return <div className="p-4">로딩중…</div>
 

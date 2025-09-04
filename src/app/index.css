@@ -38,8 +38,8 @@
   --color-pressed: #0076c5;
 
   /* Subs */
-  --color-sub: #b7e7ff;
-  --color-sub-2: #fff8ec;
+  --color-sub: #d3f0ff;
+  --color-sub-2: #f6fbff;
 
   /* Gray Scale */
   --color-black: #2d2d2d;
@@ -74,6 +74,10 @@
   }
 
   /* 텍스트 스케일 */
+  .text-bold14 {
+    font-size: 14px;
+    font-weight: 800;
+  }
   .text-semi24 {
     font-size: 24px;
     font-weight: 600;

@@ -5,6 +5,7 @@ import ThemesKeywordsPage from '@/pages/home/ThemesKeywordsPage'
 import ThemesResultPage from '@/pages/home/ThemesResultPage'
 import MapPage from '@/pages/map/MapPage'
 import PlaceDetailPage from '@/pages/map/PlaceDetailPage'
+import MyPage from '@/pages/my/MyPage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -13,4 +14,5 @@ export const router = createBrowserRouter([
   { path: '/recommend/result', element: <ThemesResultPage /> },
   { path: '/map', element: <MapPage /> },
   { path: '/map/:placeId', element: <PlaceDetailPage /> },
+  { path: '/my', element: <MyPage /> },
 ])

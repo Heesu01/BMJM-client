@@ -40,7 +40,15 @@ export default function CommonHeader({
           aria-label="뒤로가기"
           className="absolute text-[20px] text-black"
         >
-          〈
+          <svg width="24" height="24" viewBox="0 0 20 20" fill="none">
+            <path
+              d="M12.5 16.25L6.25 10l6.25-6.25"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
         </button>
 
         <h1 className="text-medium18 mx-auto text-base text-black">{title}</h1>

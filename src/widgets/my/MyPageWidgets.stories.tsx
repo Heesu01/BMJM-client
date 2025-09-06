@@ -4,7 +4,6 @@ import {
   MyHeaderBadge,
   MyProfileCard,
   MyStatRow,
-  MyMenuSection,
   type MyProfile,
 } from './MyPageWidgets'
 
@@ -43,18 +42,6 @@ export const StatRow: Story = {
       items={[
         { label: '성공 미션', value: 10 },
         { label: '퍼즐 수집', value: 2 },
-      ]}
-    />
-  ),
-}
-
-export const MenuSection: Story = {
-  render: () => (
-    <MyMenuSection
-      items={[
-        { label: '나의 기록', to: '/my/records' },
-        { label: '스크랩 모음', to: '/my/scraps' },
-        { label: '내가 쓴 후기', to: '/my/reviews' },
       ]}
     />
   ),

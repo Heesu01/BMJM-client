@@ -5,6 +5,15 @@ import HeroCardBg from '@/assets/hero-card-bg.svg?react'
 
 export type HeroCardProps = {
   isLoggedIn?: boolean
+  progress?: {
+    nickname: string
+    current: number
+    total: number
+    successMissions: number
+    runningThemes: number
+  } | null
+  loading?: boolean
+  error?: string | null
 }
 
 function ProgressBar({ value, max }: { value: number; max: number }) {
@@ -19,15 +28,14 @@ function ProgressBar({ value, max }: { value: number; max: number }) {
   )
 }
 
-export default function HeroCard({ isLoggedIn = false }: HeroCardProps) {
+export default function HeroCard({
+  isLoggedIn = false,
+  progress,
+  loading,
+  error,
+}: HeroCardProps) {
   const navigate = useNavigate()
   const goLogin = useCallback(() => navigate('/login'), [navigate])
-
-  const nickname = '닉네임'
-  const current = 3
-  const total = 10
-  const successMissions = 10
-  const runningThemes = 2
 
   const cardHeight = isLoggedIn ? 260 : 218
 
@@ -45,14 +53,20 @@ export default function HeroCard({ isLoggedIn = false }: HeroCardProps) {
 
       {!isLoggedIn ? (
         <GuestBlock onLoginClick={goLogin} />
-      ) : (
+      ) : loading ? (
+        <LoadingBlock />
+      ) : error ? (
+        <ErrorBlock message={error} />
+      ) : progress ? (
         <UserBlock
-          nickname={nickname}
-          current={current}
-          total={total}
-          successMissions={successMissions}
-          runningThemes={runningThemes}
+          nickname={progress.nickname}
+          current={progress.current}
+          total={progress.total}
+          successMissions={progress.successMissions}
+          runningThemes={progress.runningThemes}
         />
+      ) : (
+        <LoadingBlock />
       )}
     </section>
   )
@@ -120,6 +134,28 @@ function UserBlock({
           <p className="text-medium20 text-main">{runningThemes}개</p>
         </div>
       </div>
+    </div>
+  )
+}
+
+function LoadingBlock() {
+  return (
+    <div className="relative z-10 px-[20px] pt-[35px]">
+      <div className="h-6 w-32 animate-pulse rounded bg-gray-200" />
+      <div className="mt-2 h-6 w-64 animate-pulse rounded bg-gray-200" />
+      <div className="mt-4 h-3 w-48 animate-pulse rounded bg-gray-200" />
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="h-10 animate-pulse rounded bg-gray-200" />
+        <div className="h-10 animate-pulse rounded bg-gray-200" />
+      </div>
+    </div>
+  )
+}
+
+function ErrorBlock({ message }: { message: string }) {
+  return (
+    <div className="relative z-10 px-[20px] pt-[35px]">
+      <p className="text-medium14 text-red-600">에러: {message}</p>
     </div>
   )
 }

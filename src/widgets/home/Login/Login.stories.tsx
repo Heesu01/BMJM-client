@@ -15,9 +15,9 @@ const meta: Meta<typeof Login> = {
       </MemoryRouter>
     ),
   ],
-  argTypes: {
-    onKakaoLogin: { action: 'kakao login click' },
-  },
+  // argTypes: {
+  //   onKakaoLogin: { action: 'kakao login click' },
+  // },
 }
 export default meta
 type Story = StoryObj<typeof meta>

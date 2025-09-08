@@ -7,6 +7,7 @@ import MapPage from '@/pages/map/MapPage'
 import PlaceDetailPage from '@/pages/map/PlaceDetailPage'
 import MyPage from '@/pages/my/MyPage'
 import BadgesPage from '@/pages/my/BadgesPage'
+import ThemePage from '@/pages/theme/ThemePage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -17,4 +18,5 @@ export const router = createBrowserRouter([
   { path: '/map/:placeId', element: <PlaceDetailPage /> },
   { path: '/my', element: <MyPage /> },
   { path: '/my/badges', element: <BadgesPage /> },
+  { path: '/theme', element: <ThemePage /> },
 ])

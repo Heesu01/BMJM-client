@@ -1,6 +1,8 @@
+import { useEffect, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { CommonHeader } from '@/shared/CommonHeader'
 import { ThemeCard } from '@/widgets/home/ThemeCard'
+import { api } from '@/shared/api/client'
 
 type LocationState = {
   userName?: string
@@ -9,25 +11,76 @@ type LocationState = {
   moods?: string[]
 }
 
-const MOCK_THEMES = [
-  {
-    id: 'ij-market',
-    title: "영화 '국제시장' 테마",
-    desc: '부산을 배경으로 한 영화 ‘국제시장’의 명소를 둘러보세요',
-    thumbs: [
-      'https://images.unsplash.com/photo-1542038784456-1ea8e935640e?q=80&w=400',
-      'https://images.unsplash.com/photo-1534982841079-afde227ada8f?q=80&w=400',
-      'https://images.unsplash.com/photo-1525054098605-8e762c017741?q=80&w=400',
-    ],
-  },
-]
+type ThemeApiResp = {
+  statusCode: string
+  message: string
+  data: {
+    themes: Array<{
+      themeId: string
+      title: string
+      introduction: string
+      mainImageUrls: string[]
+    }>
+  }
+}
+
+type ThemeVM = {
+  id: string
+  title: string
+  desc: string
+  thumbs: string[]
+}
+
+const normalizeImg = (raw?: string) =>
+  (raw ?? '')
+    .replace(/^http:\/\//i, 'https://')
+    .replace(/\?SIZE=([^?&]+)\?OPT=/i, '?SIZE=$1&OPT=')
 
 export default function ThemeResultPage() {
   const navigate = useNavigate()
   const { state } = useLocation()
   const { userName = '여행자' } = (state as LocationState) || {}
 
-  const themes = MOCK_THEMES.concat(MOCK_THEMES, MOCK_THEMES)
+  const selectedKeywords = useMemo(() => {
+    const s = (state as LocationState) || {}
+    return [...(s.goals ?? []), ...(s.foods ?? []), ...(s.moods ?? [])]
+  }, [state])
+
+  const [themes, setThemes] = useState<ThemeVM[]>([])
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    let alive = true
+    if (!selectedKeywords.length) {
+      setThemes([])
+      return
+    }
+    ;(async () => {
+      try {
+        setLoading(true)
+        const { data } = await api.post<ThemeApiResp>('/home/theme', {
+          selectedKeywords,
+        })
+        if (!alive) return
+        const src = data?.data?.themes ?? []
+        const mapped: ThemeVM[] = src.map((t) => ({
+          id: t.themeId,
+          title: t.title,
+          desc: t.introduction,
+          thumbs: (t.mainImageUrls ?? []).map(normalizeImg),
+        }))
+        setThemes(mapped)
+      } catch {
+        if (alive) setThemes([])
+      } finally {
+        if (alive) setLoading(false)
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [selectedKeywords])
+
   const count = themes.length
 
   const openTheme = (id: string) => {
@@ -48,10 +101,21 @@ export default function ThemeResultPage() {
         </p>
       </section>
 
+      {loading && (
+        <div className="space-y-3">
+          {[0, 1, 2].map((i) => (
+            <div
+              key={i}
+              className="h-28 animate-pulse rounded-xl bg-gray-200"
+            />
+          ))}
+        </div>
+      )}
+
       <section className="space-y-[12px]">
         {themes.map((t) => (
           <ThemeCard
-            key={t.id + Math.random()}
+            key={t.id}
             id={t.id}
             title={t.title}
             desc={t.desc}
@@ -59,6 +123,11 @@ export default function ThemeResultPage() {
             onClick={openTheme}
           />
         ))}
+        {!loading && themes.length === 0 && (
+          <p className="py-8 text-center text-gray-500">
+            추천 결과가 없습니다. 키워드를 바꿔보세요.
+          </p>
+        )}
       </section>
     </div>
   )

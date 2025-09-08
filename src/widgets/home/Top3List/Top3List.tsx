@@ -1,47 +1,36 @@
 import { Icon } from '@/shared/icons'
-
-export type Top3Item = {
-  id: string
-  title: string
-  address: string
-  imageUrl: string
-}
+import type { Top3Item } from '@/features/home/model'
 
 type Props = {
-  items?: Top3Item[]
+  items?: Top3Item[] | null
   className?: string
   onItemClick?: (id: string) => void
 }
 
-const FALLBACK_TOP3: Top3Item[] = [
-  {
-    id: 'f1',
-    title: '부산 최고 맛집, 피리피리',
-    address: '해운대구 6-2',
-    imageUrl: 'https://picsum.photos/seed/top1/1200/800',
-  },
-  {
-    id: 'f2',
-    title: '부산 최고 맛집, 피리피리',
-    address: '해운대구 6-2',
-    imageUrl: 'https://picsum.photos/seed/top2/1200/800',
-  },
-  {
-    id: 'f3',
-    title: '부산 최고 맛집, 피리피리',
-    address: '해운대구 6-2',
-    imageUrl: 'https://picsum.photos/seed/top3/1200/800',
-  },
-]
+const norm = (raw?: string) => {
+  if (!raw) return ''
+  try {
+    if (raw.includes('thumb2.tripinfo.co.kr/thumb.php')) {
+      const u = new URL(raw)
+      const inner = u.searchParams.get('url')
+      if (inner) raw = inner
+    }
+  } catch {
+    //
+  }
+  return raw
+    .replace(/^http:\/\//i, 'https://')
+    .replace(/\?SIZE=([^?&]+)\?OPT=/i, '?SIZE=$1&OPT=')
+}
 
 export default function Top3List({
   items,
   className = '',
   onItemClick,
 }: Props) {
-  const list: Top3Item[] = (
-    items && items.length ? items : FALLBACK_TOP3
-  ).slice(0, 3)
+  if (!items || items.length === 0) return null
+
+  const list = items.slice(0, 3)
 
   return (
     <section className={`mt-[40px] ${className}`}>
@@ -50,15 +39,21 @@ export default function Top3List({
       <div className="space-y-[10px]">
         {list.map((item, idx) => (
           <button
-            key={item.id}
-            onClick={() => onItemClick?.(item.id)}
+            key={item.id || `${idx}-${item.title}`}
+            onClick={() => item.id && onItemClick?.(item.id)}
             className="group relative block h-[100px] w-full overflow-hidden rounded-[20px] text-left"
+            aria-label={item.title}
           >
             <img
-              src={item.imageUrl}
-              alt=""
+              src={norm(item.imageUrl)}
+              alt={item.title || '인기 맛집 이미지'}
               loading="lazy"
+              referrerPolicy="no-referrer"
               className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+              onError={(e) => {
+                e.currentTarget.src =
+                  'https://picsum.photos/seed/top-fallback/1200/800'
+              }}
             />
 
             <div className="absolute inset-0 bg-black/15" />

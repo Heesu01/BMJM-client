@@ -5,6 +5,33 @@
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite + React + TS</title>
+    <script type="module">
+      ;(async () => {
+        const sp = new URLSearchParams(location.search)
+        const code = sp.get('code')
+        if (!code) return
+
+        const apiBase = import.meta.env.VITE_API_BASE_URL
+        const endpoint = `${apiBase}/auth/kakao/callback?code=${encodeURIComponent(code)}`
+
+        try {
+          const resp = await fetch(endpoint, { method: 'GET' })
+          const json = await resp.json()
+          if (!resp.ok) throw new Error(json?.message || '교환 실패')
+
+          const token = json?.data?.accessToken
+          if (!token) throw new Error('토큰 없음')
+
+          localStorage.setItem('accessToken', token)
+
+          history.replaceState({}, '', '/')
+          location.reload()
+        } catch (e) {
+          console.error('[OAuth inline] 실패:', e)
+          alert('로그인 처리 중 오류: ' + (e?.message || '네트워크 오류'))
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="root"></div>

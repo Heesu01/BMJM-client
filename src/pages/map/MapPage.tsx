@@ -22,10 +22,8 @@ const tabs: { key: TabKey; label: string }[] = [
   { key: 'spot', label: '관광지' },
 ]
 
-const toSlug = (name: string) => encodeURIComponent(name.trim())
-
 const NEARBY_SHEET_ANCHOR = 94
-const PREVIEW_LIFT_WHEN_SHEET_OPEN = 260
+// const PREVIEW_LIFT_WHEN_SHEET_OPEN = 260
 
 export default function MapPage() {
   const navigate = useNavigate()
@@ -300,10 +298,10 @@ export default function MapPage() {
     [],
   )
 
-  // 프리뷰 카드 위치
-  const previewBottom = nearbyOpen
-    ? NEARBY_SHEET_ANCHOR + PREVIEW_LIFT_WHEN_SHEET_OPEN
-    : NEARBY_SHEET_ANCHOR
+  // // 프리뷰 카드 위치
+  // const previewBottom = nearbyOpen
+  //   ? NEARBY_SHEET_ANCHOR + PREVIEW_LIFT_WHEN_SHEET_OPEN
+  //   : NEARBY_SHEET_ANCHOR
 
   return (
     <div className="relative min-h-dvh">
@@ -343,13 +341,15 @@ export default function MapPage() {
         <PlacePreviewCard
           place={selected}
           myLoc={myLoc}
-          anchorBottomPx={previewBottom}
+          anchorBottomPx={NEARBY_SHEET_ANCHOR}
           onClose={() => setSelected(null)}
           onDetail={() => {
             const place = kakaoToPlace(selected)
-            navigate(`/map/${toSlug(place.name)}`, { state: { place } })
+            navigate(`/map/${encodeURIComponent(place.name)}`, {
+              state: { place },
+            })
           }}
-          onNearby={() => setNearbyOpen((v) => !v)}
+          onNearby={() => setNearbyOpen(true)}
         />
       )}
 
@@ -368,7 +368,9 @@ export default function MapPage() {
           onFocusItem={(p) => setCenter({ lat: Number(p.y), lng: Number(p.x) })}
           onDetailItem={(p) => {
             const place = kakaoToPlace(p)
-            navigate(`/map/${toSlug(place.name)}`, { state: { place } })
+            navigate(`/map/${encodeURIComponent(place.name)}`, {
+              state: { place },
+            })
           }}
         />
       )}

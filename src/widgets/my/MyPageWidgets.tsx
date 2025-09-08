@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 export type MyProfile = {
   name: string
@@ -16,21 +16,18 @@ export function MyHeaderBadge({
 }) {
   return (
     <div className="grid place-items-center">
-      <div className="bg-sub text-main text-bold14 rounded-full px-[60px] py-[6.5px]">
-        {label}
-      </div>
-      <div className="mt-[14px] grid place-items-center shadow-sm">
-        <Link
-          to="/my/badges"
-          className="flex h-full items-center justify-center"
-        >
+      <Link to="/my/badges">
+        <div className="bg-sub text-main text-bold14 rounded-full px-[60px] py-[6.5px]">
+          {label}
+        </div>
+        <div className="mt-[14px] grid place-items-center">
           <img
             src={badgeUrl}
             alt={label}
-            className="bg-gray-40 h-[143px] w-[143px] cursor-pointer"
+            className="h-[143px] w-[143px] cursor-pointer"
           />
-        </Link>
-      </div>
+        </div>
+      </Link>
     </div>
   )
 }
@@ -38,7 +35,7 @@ export function MyHeaderBadge({
 export function MyProfileCard({ profile }: { profile: MyProfile }) {
   const { name, email, avatarUrl } = profile
   return (
-    <div className="ring-sub m-auto mt-[19px] w-[90%] rounded-full bg-white px-[20px] py-[16px] shadow-sm ring-1">
+    <div className="ring-sub m-auto mt-[19px] w-[90%] rounded-full bg-white px-[20px] py-[17px] shadow-sm ring-1">
       <div className="flex items-center gap-3">
         <div className="bg-sub grid h-[44px] w-[44px] place-items-center rounded-full">
           {avatarUrl ? (
@@ -94,13 +91,20 @@ export function MyStatRow({ items }: { items: StatItem[] }) {
 
 export type MenuItem = { label: string; to: string; rightText?: string }
 export function MyMenuSection() {
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken')
+    navigate('/', { replace: true })
+  }
+
   return (
     <div className="overflow-hidden rounded-t-[20px] bg-[#F9F9F9] px-[20px] pt-[30px]">
       <span className="text-semi16">나의기록</span>
       <ul className="border-gray-20 mt-[20px] gap-[10px] border-t border-b">
         <li>
           <Link
-            to={`/my/reviews`}
+            to={`/my/scrap`}
             className="flex items-center justify-between py-[15px]"
           >
             <span className="text-semi16 text-gray-80">스크랩모음</span>
@@ -142,6 +146,7 @@ export function MyMenuSection() {
       <button
         className="text-danger text-semi16 w-full py-[18px] text-center"
         type="button"
+        onClick={handleLogout}
       >
         로그아웃
       </button>

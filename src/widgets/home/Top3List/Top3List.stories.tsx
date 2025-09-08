@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite'
-import Top3List, { type Top3Item } from './Top3List'
+import Top3List from './Top3List'
+import type { Top3Item } from '@/features/home/model'
 
 const items: Top3Item[] = [
   {
@@ -27,19 +28,31 @@ const meta: Meta<typeof Top3List> = {
   component: Top3List,
   parameters: { layout: 'centered' },
   decorators: [
-    (S) => (
+    (Story) => (
       <div className="w-[360px] bg-[#F9F9F9] p-5">
-        <S />
+        <Story />
       </div>
     ),
   ],
   argTypes: {
     onItemClick: { action: 'clicked' },
+    className: { control: 'text' },
   },
 }
 export default meta
+
 type Story = StoryObj<typeof Top3List>
 
-export const WithData: Story = { args: { items } }
+export const WithData: Story = {
+  args: { items },
+}
 
-export const Fallback: Story = { args: {} }
+export const Fallback: Story = {
+  args: {},
+}
+
+export const WithBrokenImages: Story = {
+  args: {
+    items: items.map((it) => ({ ...it, imageUrl: 'https://invalid.example' })),
+  },
+}

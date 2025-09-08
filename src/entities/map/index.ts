@@ -24,6 +24,7 @@ export type Place = {
   photos: string[]
   menus: Menu[]
   reviews: Review[]
+  description?: string
 }
 
 const mockPlaces: Place[] = [

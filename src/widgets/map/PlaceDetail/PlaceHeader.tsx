@@ -43,7 +43,8 @@ export default function PlaceHeader({ place, onBack }: Props) {
           <div className="text-regular14 flex items-center gap-1">
             <IoStar size={15} className="text-main" />
             <span className="align-middle text-black">
-              {rating} ({reviewCount})
+              {typeof rating === 'number' ? rating.toFixed(1) : '0.0'} (
+              {reviewCount ?? 0})
             </span>
           </div>
         </div>
@@ -54,9 +55,7 @@ export default function PlaceHeader({ place, onBack }: Props) {
         </div>
 
         {hours && (
-          <div className="text-medium12 mt-[18px] text-black">
-            영업중 {hours}
-          </div>
+          <div className="text-medium12 mt-[18px] text-black">{hours}</div>
         )}
       </div>
     </header>

@@ -9,6 +9,7 @@ import MyPage from '@/pages/my/MyPage'
 import BadgesPage from '@/pages/my/BadgesPage'
 import ThemePage from '@/pages/theme/ThemePage'
 import ThemeDetailPage from '@/pages/theme/ThemeDetailPage'
+import ThemeCreatePage from '@/pages/theme/ThemeCreatePage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -21,4 +22,5 @@ export const router = createBrowserRouter([
   { path: '/my/badges', element: <BadgesPage /> },
   { path: '/theme', element: <ThemePage /> },
   { path: '/theme/:themeId', element: <ThemeDetailPage /> },
+  { path: '/theme/create', element: <ThemeCreatePage /> },
 ])

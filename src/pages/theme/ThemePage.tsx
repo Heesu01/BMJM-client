@@ -11,14 +11,7 @@ export default function ThemePage() {
     <div className="bg-gray-10 min-h-dvh">
       <ThemeTabNav value={tab} onChange={setTab} />
       <main className="px-[20px] pb-[120px]">
-        {tab === 'official' && (
-          <ThemeOfficialSection
-            onKeywordItemClick={(id) =>
-              console.log('official keyword click:', id)
-            }
-            className="mt-[20px]"
-          />
-        )}
+        {tab === 'official' && <ThemeOfficialSection className="mt-[20px]" />}
 
         {tab === 'user' && <ThemeUserSection className="mt-[20px]" />}
       </main>

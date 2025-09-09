@@ -119,10 +119,7 @@ const toUrl = (key: string) =>
     ? key
     : (IMG_MAP[key] ?? `https://picsum.photos/seed/${key}/400/300`)
 
-export default function ThemeOfficialSection({
-  onKeywordItemClick,
-  className = '',
-}: Props) {
+export default function ThemeOfficialSection({ className = '' }: Props) {
   const navigate = useNavigate()
   const [hero, setHero] = useState<HeroTheme[]>([])
   useEffect(() => {
@@ -202,7 +199,7 @@ export default function ThemeOfficialSection({
           {keywordItems.map((it) => (
             <button
               key={it.themeId}
-              onClick={() => onKeywordItemClick?.(it.themeId)}
+              onClick={() => navigate(`/theme/${it.themeId}`)}
               className="w-full pt-[12px] text-left"
             >
               <div className="flex gap-[12px]">

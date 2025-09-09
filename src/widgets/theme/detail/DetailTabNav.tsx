@@ -1,28 +1,21 @@
-type TabKey = 'official' | 'user'
-
+type TabKey = 'about' | 'review'
 type Props = {
   value: TabKey
   onChange: (v: TabKey) => void
   className?: string
 }
 
-export default function ThemeTabNav({
+export default function DetailTabNav({
   value,
   onChange,
   className = '',
 }: Props) {
   const tabs: { key: TabKey; label: string }[] = [
-    { key: 'official', label: '공식 테마' },
-    { key: 'user', label: '유저 테마' },
+    { key: 'about', label: '테마 설명' },
+    { key: 'review', label: '테마 리뷰' },
   ]
-
   return (
-    <nav
-      className={['sticky top-0 z-40', 'bg-white', 'mb-[30px]', className].join(
-        ' ',
-      )}
-    >
-      <div className="h-[10px] w-full"></div>
+    <nav className={`sticky top-0 z-30 bg-white ${className}`}>
       <div className="text-gray-60 text-semi16 grid h-[55px] grid-cols-2 text-center">
         {tabs.map((t) => {
           const active = value === t.key

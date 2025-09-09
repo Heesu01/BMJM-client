@@ -2,14 +2,35 @@ import { FaRegEye } from 'react-icons/fa'
 import { GoBookmark, GoBookmarkFill } from 'react-icons/go'
 import type { ThemeDetail } from '@/features/theme/model'
 import { useState } from 'react'
+import { scrapTheme, unscrapTheme } from '@/features/theme/model'
 
 type Props = { theme: ThemeDetail; onBack?: () => void }
 
 export default function ThemeHeader({ theme }: Props) {
   const [scrap, setScrap] = useState<boolean>(theme.scrapped)
+  const [pending, setPending] = useState(false)
   const hero =
     theme.mainImageUrl ??
     'https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1600&auto=format&fit=crop'
+
+  const onToggleScrap = async () => {
+    if (pending) return
+    const next = !scrap
+    setScrap(next)
+    setPending(true)
+    try {
+      if (next) {
+        await scrapTheme(theme.themeId)
+      } else {
+        await unscrapTheme(theme.themeId)
+      }
+    } catch (e) {
+      setScrap(!next)
+      console.error('scrap toggle failed:', e)
+    } finally {
+      setPending(false)
+    }
+  }
 
   return (
     <header className="mt-[75px]">
@@ -33,10 +54,16 @@ export default function ThemeHeader({ theme }: Props) {
           <h1 className="text-semi20 leading-none">{theme.title}</h1>
           <button
             aria-label="스크랩"
-            onClick={() => setScrap((s) => !s)}
-            className="align-center flex justify-center text-black/70"
+            aria-pressed={scrap}
+            disabled={pending}
+            onClick={onToggleScrap}
+            className="align-center flex justify-center text-black/70 disabled:opacity-50"
           >
-            {scrap ? <GoBookmarkFill size={20} /> : <GoBookmark size={20} />}
+            {scrap ? (
+              <GoBookmarkFill size={20} className="text-main" />
+            ) : (
+              <GoBookmark size={20} />
+            )}
           </button>
         </div>
 

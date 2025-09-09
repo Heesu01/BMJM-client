@@ -1,13 +1,34 @@
 import type { ThemeComment } from '@/features/theme/model'
-import { useState } from 'react'
+import { createThemeComment } from '@/features/theme/model'
+import { useState, type ChangeEvent } from 'react'
 import { IoIosSend } from 'react-icons/io'
 
 type Props = {
+  themeId: string
   comments: ThemeComment[]
+  onChange?: (next: ThemeComment[]) => void
 }
 
-export default function ThemeComments({ comments }: Props) {
+const getErrorMessage = (e: unknown) =>
+  e instanceof Error ? e.message : '댓글 작성 실패'
+
+export default function ThemeComments({ themeId, comments, onChange }: Props) {
   const [text, setText] = useState('')
+  const [loading, setLoading] = useState(false)
+
+  const handleSubmit = async () => {
+    if (!text.trim() || loading) return
+    setLoading(true)
+    try {
+      const next = await createThemeComment(themeId, text.trim())
+      onChange?.(next)
+      setText('')
+    } catch (e: unknown) {
+      alert(getErrorMessage(e))
+    } finally {
+      setLoading(false)
+    }
+  }
 
   return (
     <section className="border-gray-20 mt-6 border-t">
@@ -52,19 +73,22 @@ export default function ThemeComments({ comments }: Props) {
         <div className="flex items-center gap-2 rounded-[10px] bg-[#f9f9f9] px-[10px] py-[12px]">
           <input
             value={text}
-            onChange={(e) => setText(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setText(e.target.value)
+            }
             placeholder="댓글을 남겨주세요."
             className="text-regular16 placeholder:text-gray-40 h-full w-full rounded-[10px] outline-none"
           />
           <button
             type="button"
             aria-label="댓글 등록"
-            onClick={() => {
-              if (!text.trim()) return
-              setText('')
-            }}
+            disabled={loading}
+            onClick={handleSubmit}
           >
-            <IoIosSend size={20} className="text-main" />
+            <IoIosSend
+              size={20}
+              className={loading ? 'text-gray-300' : 'text-main'}
+            />
           </button>
         </div>
       </div>

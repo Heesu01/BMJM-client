@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { CommonHeader } from '@/shared/CommonHeader'
 import ThemeHeader from '@/widgets/theme/detail/ThemeHeader'
 import DetailTabNav from '@/widgets/theme/detail/DetailTabNav'
@@ -16,8 +16,9 @@ import {
 } from '@/features/theme/model'
 
 export default function ThemeDetailPage() {
-  const { id = '' } = useParams()
-  const navigate = useNavigate()
+  const params = useParams()
+  const id = params.id ?? params.themeId ?? ''
+
   const [theme, setTheme] = useState<ThemeDetail | null>(null)
   const [comments, setComments] = useState<ThemeComment[]>([])
   const [reviews, setReviews] = useState<ThemeReview[]>([])
@@ -25,26 +26,50 @@ export default function ThemeDetailPage() {
   const [err, setErr] = useState<string | null>(null)
 
   useEffect(() => {
+    if (!id) {
+      setErr('테마 ID가 없습니다.')
+      return
+    }
+
     let alive = true
     setErr(null)
-    ;(async () => {
-      try {
-        const t = await fetchThemeById(id)
+
+    setTheme(null)
+    setComments([])
+    setReviews([])
+
+    const pTheme = fetchThemeById(id)
+    const pComments = fetchThemeComments(id)
+    const pReviews = fetchThemeReviews(id)
+
+    pTheme
+      .then((t) => {
         if (!alive) return
         setTheme(t)
-
-        const [r, c] = await Promise.all([
-          fetchThemeReviews(id),
-          fetchThemeComments(id),
-        ])
-        if (!alive) return
-        setReviews(r)
-        setComments(c)
-      } catch (e) {
+      })
+      .catch(() => {
         if (!alive) return
         setErr('로드 중 오류가 발생했어요.')
-      }
-    })()
+      })
+
+    pComments
+      .then((c) => {
+        if (!alive) return
+        setComments(c)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
+    pReviews
+      .then((r) => {
+        if (!alive) return
+        setReviews(r)
+      })
+      .catch((e) => {
+        console.error(e)
+      })
+
     return () => {
       alive = false
     }
@@ -56,14 +81,18 @@ export default function ThemeDetailPage() {
   return (
     <div className="min-h-dvh bg-white">
       <CommonHeader title="상세 테마" />
-      <ThemeHeader theme={theme} onBack={() => navigate(-1)} />
+      <ThemeHeader theme={theme} />
       <DetailTabNav value={tab} onChange={setTab} className="mb-[8px]" />
 
       <div>
         {tab === 'about' ? (
           <>
             <ThemeAboutTab theme={theme} />
-            <ThemeComments comments={comments} />
+            <ThemeComments
+              themeId={id}
+              comments={comments}
+              onChange={setComments}
+            />
           </>
         ) : (
           <ThemeReviewTab reviews={reviews} />

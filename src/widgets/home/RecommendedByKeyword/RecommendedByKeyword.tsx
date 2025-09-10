@@ -5,6 +5,7 @@ import {
   type ThemeItem,
   fetchThemesByKeyword,
 } from '@/features/home/model'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   initialKeyword?: ThemeKeyword
@@ -23,6 +24,7 @@ export default function RecommendedByKeyword({
 
   const [selected, setSelected] = useState<ThemeKeyword>(initial)
   const [items, setItems] = useState<ThemeItem[]>([])
+  const navigate = useNavigate()
 
   useEffect(() => {
     let alive = true
@@ -75,6 +77,7 @@ export default function RecommendedByKeyword({
           {items.map((item) => (
             <article
               key={item.id}
+              onClick={() => navigate(`/theme/${item.id}`)}
               className="relative w-[140px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-black/5"
             >
               <div className="pointer relative h-[157px] w-full cursor-pointer">

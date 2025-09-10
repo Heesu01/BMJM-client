@@ -31,7 +31,7 @@ export default function BottomTabBar({ className = '' }: Props) {
         >
           <Tab to="/" label="홈" icon="home" className="justify-self-center" />
           <Tab
-            to="/themes"
+            to="/theme"
             label="테마"
             icon="list"
             className="justify-self-center"

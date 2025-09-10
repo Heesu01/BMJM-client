@@ -65,7 +65,7 @@ export default function ThemeCreatePage() {
       setSubmitting(true)
       await createTheme(payload)
       alert('테마가 등록되었습니다.')
-      navigate(`/theme`)
+      navigate('/theme?tab=user', { replace: true })
     } catch (err: unknown) {
       console.error(err)
       const message =

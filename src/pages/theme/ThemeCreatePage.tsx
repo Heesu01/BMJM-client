@@ -3,8 +3,9 @@ import { CommonHeader } from '@/shared/CommonHeader'
 import React, { useMemo, useRef, useState } from 'react'
 import { GrGallery } from 'react-icons/gr'
 import { RiResetLeftLine } from 'react-icons/ri'
-
 import { THEME_KEYWORDS, type ThemeKeyword } from '@/features/home/model'
+import { createTheme, type CreateThemeReq } from '@/features/theme/model'
+import { useNavigate } from 'react-router-dom'
 
 export type ThemePlace = {
   id: string
@@ -22,6 +23,8 @@ export default function ThemeCreatePage() {
   const [title, setTitle] = useState('')
   const [summary, setSummary] = useState('')
   const [places, setPlaces] = useState<ThemePlace[]>([])
+  const [submitting, setSubmitting] = useState(false)
+  const navigate = useNavigate()
 
   const canSubmit = useMemo(
     () =>
@@ -34,6 +37,49 @@ export default function ThemeCreatePage() {
     [topics.length, title, summary, places.length],
   )
 
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!canSubmit || submitting) return
+
+    const cleaned = places
+      .map((p) => ({
+        address: p.address.trim(),
+        content: p.description.trim(),
+        imageFile: p.image ?? undefined,
+      }))
+      .filter((p) => p.address && p.content)
+
+    if (cleaned.length === 0) {
+      alert('장소의 주소/설명을 1개 이상 입력해주세요.')
+      return
+    }
+
+    const payload: CreateThemeReq = {
+      title: title.trim(),
+      introduction: summary.trim(),
+      keywords: topics,
+      items: cleaned,
+    }
+
+    try {
+      setSubmitting(true)
+      await createTheme(payload)
+      alert('테마가 등록되었습니다.')
+      navigate(`/theme`)
+    } catch (err: unknown) {
+      console.error(err)
+      const message =
+        err instanceof Error
+          ? err.message
+          : typeof err === 'string'
+            ? err
+            : '등록에 실패했어요.'
+      alert(message)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
   const addPlace = () =>
     setPlaces((prev) => [
       ...prev,
@@ -45,11 +91,6 @@ export default function ThemeCreatePage() {
 
   const removePlace = (id: string) =>
     setPlaces((prev) => prev.filter((p) => p.id !== id))
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    alert('임시 제출: API 연동 예정입니다.')
-  }
 
   const selectedLabels = THEME_KEYWORDS.filter((k) =>
     topics.includes(k.value as ThemeKeyword),
@@ -133,13 +174,14 @@ export default function ThemeCreatePage() {
             </button>
           </div>
         </section>
-
-        <CommonBtn
-          disabled={!canSubmit}
-          className={`text-medium16 mt-[30px] w-full rounded-xl ${canSubmit ? 'bg-main text-white' : 'bg-gray-200 text-gray-400'}`}
-        >
-          작성 완료
-        </CommonBtn>
+        <button type="submit" className="w-full">
+          <CommonBtn
+            disabled={!canSubmit || submitting}
+            className={`text-medium16 mt-[30px] w-full rounded-xl ${canSubmit && !submitting ? 'bg-main text-white' : 'bg-gray-200 text-gray-400'}`}
+          >
+            {submitting ? '작성 중…' : '작성 완료'}
+          </CommonBtn>
+        </button>
       </form>
 
       {topicSheetOpen && (

@@ -269,3 +269,48 @@ export async function unscrapTheme(themeId: string): Promise<void> {
     throw e as ApiError
   }
 }
+
+export type CreateThemeItem = {
+  content: string
+  address: string
+  imageFile?: File | null
+}
+
+export type CreateThemeReq = {
+  title: string
+  introduction: string
+  keywords: ServerKeyword[]
+  items: CreateThemeItem[]
+}
+
+// form-data
+export function buildThemeFormData(req: CreateThemeReq) {
+  const fd = new FormData()
+  fd.append('title', req.title)
+  fd.append('introduction', req.introduction)
+
+  req.keywords.forEach((kw, i) => fd.append(`keywords[${i}]`, kw))
+
+  req.items.forEach((it, i) => {
+    fd.append(`items[${i}].content`, it.content)
+    fd.append(`items[${i}].address`, it.address)
+    if (it.imageFile) {
+      fd.append(`items[${i}].imageFile`, it.imageFile)
+    }
+  })
+
+  return fd
+}
+
+// [CREATE] 테마 생성
+export async function createTheme(req: CreateThemeReq) {
+  try {
+    const form = buildThemeFormData(req)
+    const res = await api.post('/themes', form, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return res.data
+  } catch (e) {
+    throw e as ApiError
+  }
+}

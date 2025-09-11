@@ -4,9 +4,11 @@ import {
   usePuzzleMapProgress,
   useRegionMissions,
 } from '@/features/puzzle/model'
+import { useNavigate } from 'react-router-dom'
 
 export default function PuzzleMapTab() {
-  const { data, byRegion, totalCollected, loading } = usePuzzleMapProgress()
+  const navigate = useNavigate()
+  const { data, byRegion, loading, completedCount } = usePuzzleMapProgress()
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
 
   const defaultRegion = useMemo(() => {
@@ -15,11 +17,11 @@ export default function PuzzleMapTab() {
     return firstIncomplete ?? data?.[0]?.puzzleRegion ?? null
   }, [selectedRegion, data])
 
+  const current = defaultRegion ? byRegion[defaultRegion] : undefined
   const { data: missionData, loading: missionsLoading } = useRegionMissions(
-    defaultRegion ?? undefined,
+    current?.puzzleId,
   )
 
-  const current = defaultRegion ? byRegion[defaultRegion] : undefined
   const collected = current?.collectedMissionCount ?? 0
   const total = current?.totalMissionCount ?? 0
   const percent = total > 0 ? Math.round((collected / total) * 100) : 0
@@ -28,13 +30,14 @@ export default function PuzzleMapTab() {
     <div>
       <div className="absolute left-[20px]">
         <div className="text-semi16">
-          총 {totalCollected}개의 퍼즐을 모았어요!
+          총 {completedCount}개의 퍼즐을 모았어요!
         </div>
         <div className="text-medium14 text-gray-60 mt-[2px]">
           미션을 달성하고 퍼즐을 채워보세요.
         </div>
       </div>
-      <div className="m-atuo flex w-full items-center justify-center">
+
+      <div className="m-auto flex w-full items-center justify-center">
         <BusanMapSVG
           selected={defaultRegion}
           progressByRegion={byRegion}
@@ -87,7 +90,8 @@ export default function PuzzleMapTab() {
                 key={m.missionId}
                 title={m.missionTitle}
                 desc={m.missionDescription}
-                onClick={() => {}}
+                onClick={() => navigate(`/missions/${m.missionId}`)}
+                completed={m.isCompleted}
               />
             ))}
           </div>
@@ -104,23 +108,89 @@ export default function PuzzleMapTab() {
 function MissionItem({
   title,
   desc,
+  completed = false,
   onClick,
 }: {
   title: string
   desc: string
+  completed?: boolean
   onClick?: () => void
 }) {
+  const base =
+    'group flex w-full items-stretch overflow-hidden border transition-colors'
+  const doneStyle =
+    'border-gray-200 bg-gray-50 cursor-default pointer-events-none'
+  const todoStyle =
+    'border-gray-200 bg-white hover:border-main/40 hover:bg-main/3'
+
   return (
     <button
-      onClick={onClick}
-      className="group border-gray-20 flex w-full items-stretch overflow-hidden border bg-white"
+      onClick={completed ? undefined : onClick}
+      className={`${base} ${completed ? doneStyle : todoStyle}`}
+      aria-pressed={completed}
+      aria-disabled={completed}
     >
-      <div className="bg-main w-[8px]" aria-hidden />
+      <div
+        className={`w-[8px] ${completed ? 'bg-emerald-400/80' : 'bg-main'}`}
+        aria-hidden
+      />
+
       <div className="flex-1 p-[15px] pr-[12px] text-left">
-        <div className="text-semi16">{title}</div>
-        <div className="text-medium12 text-gray-60 mt-1">{desc}</div>
+        <div
+          className={`text-semi16 flex ${
+            completed ? 'text-gray-500 line-through' : 'text-gray-900'
+          }`}
+        >
+          {title}
+          {completed ? (
+            <span className="ml-[5px] inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-700">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                <path
+                  d="M20 6L9 17l-5-5"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+              완료
+            </span>
+          ) : (
+            <span className="ml-[5px] inline-flex items-center gap-1 rounded-full bg-blue-500/5 px-2 py-0.5 text-[11px] text-blue-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
+              진행 가능
+            </span>
+          )}
+        </div>
+        <div
+          className={`text-medium12 mt-1 ${
+            completed ? 'text-gray-400' : 'text-gray-60'
+          }`}
+        >
+          {desc}
+        </div>
       </div>
-      <div className="flex items-center pr-[23px] text-[30px]">›</div>
+
+      <div className="flex items-center pr-[23px] text-[22px]">
+        {completed ? (
+          <svg
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            className="text-emerald-600"
+          >
+            <path
+              d="M20 6L9 17l-5-5"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+        ) : (
+          <span className="group-hover:text-main text-gray-500">›</span>
+        )}
+      </div>
     </button>
   )
 }

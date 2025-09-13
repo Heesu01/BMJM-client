@@ -7,12 +7,9 @@ import { useMissionRankings } from '@/features/puzzle/model'
 
 export default function PuzzleMapPage() {
   const [tab, setTab] = useState<'map' | 'ranking'>('map')
-  const { data, loading, error } = useMissionRankings()
-  if (loading) return <div>랭킹 로딩중…</div>
-  if (error) return <div>에러</div>
-  if (!data) return null
+  const { data, loading } = useMissionRankings()
 
-  const users = data.map((r) => ({
+  const users = (data ?? []).map((r) => ({
     id: String(r.rank),
     name: r.userName,
     avatarUrl: r.profileImage,
@@ -22,7 +19,11 @@ export default function PuzzleMapPage() {
   return (
     <div className="bg-gray-10 min-h-dvh">
       <PuzzleTabNav value={tab} onChange={setTab} />
-      {tab === 'map' ? <PuzzleMapTab /> : <RankingTab users={users} />}
+      {tab === 'map' ? (
+        <PuzzleMapTab />
+      ) : (
+        <RankingTab users={users} isLoading={loading} />
+      )}
       <BottomTabBar />
     </div>
   )

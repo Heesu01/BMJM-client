@@ -153,3 +153,92 @@ export function useMissionRankings() {
   }, [])
   return { data, loading, error }
 }
+
+export type MissionDetailResp = {
+  statusCode: string
+  message: string
+  data: {
+    missionId: string
+    missionTitle: string
+    missionIntroduction: string
+    missionContent: string
+    missionImageUrl: string
+    x?: string
+    y?: string
+  }
+}
+
+export function useMissionDetail(missionId?: string) {
+  const [data, setData] = useState<MissionDetailResp['data'] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<ApiError | null>(null)
+
+  useEffect(() => {
+    if (!missionId) return
+    let alive = true
+    ;(async () => {
+      setLoading(true)
+      try {
+        const res = await api.get<MissionDetailResp>(
+          `/puzzles/mission/${missionId}/detail`,
+        )
+        if (!alive) return
+        setData(res.data.data)
+      } catch (e) {
+        if (!alive) return
+        setError(e as ApiError)
+      } finally {
+        if (alive) setLoading(false)
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [missionId])
+
+  return { data, loading, error }
+}
+
+export type MissionRecordItem = {
+  userName: string
+  userProfile: string
+  createdAt: string
+  imageUrls: string[]
+  content: string
+}
+export type MissionRecordResp = {
+  statusCode: string
+  message: string
+  data: { missionRecordList: MissionRecordItem[] }
+}
+
+export function useMissionRecords(missionId?: string) {
+  const [data, setData] = useState<MissionRecordItem[] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<unknown>(null)
+
+  useEffect(() => {
+    if (!missionId) return
+    let alive = true
+    ;(async () => {
+      setLoading(true)
+      try {
+        const res = await api.get<MissionRecordResp>(
+          `/puzzles/mission/${missionId}/record`,
+        )
+        if (!alive) return
+        setData(res.data.data.missionRecordList ?? [])
+      } catch (e) {
+        if (!alive) return
+        setError(e)
+      } finally {
+        if (alive) setLoading(false)
+      }
+    })()
+    return () => {
+      alive = false
+    }
+  }, [missionId])
+
+  return { data, loading, error }
+}

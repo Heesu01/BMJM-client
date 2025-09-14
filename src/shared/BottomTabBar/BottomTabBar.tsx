@@ -25,6 +25,7 @@ export default function BottomTabBar({ className = '' }: Props) {
       style={{ bottom: '20px' }}
     >
       <div className="relative mx-auto w-full max-w-[680px] px-[20px]">
+        <div className="pointer-events-none absolute inset-x-[20px] bottom-0 -z-10 h-[60px] rounded-full shadow-[0_4px_7px_rgba(0,0,0,0.1)]" />
         <div
           className="tab-cutout grid h-[60px] grid-cols-[1fr_1fr_1fr_1fr_1fr] items-center rounded-full bg-white px-[20px] py-[7px]"
           style={barStyle}

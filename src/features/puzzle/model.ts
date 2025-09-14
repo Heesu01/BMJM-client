@@ -242,3 +242,38 @@ export function useMissionRecords(missionId?: string) {
 
   return { data, loading, error }
 }
+
+export type SimpleResp = {
+  statusCode: string
+  message: string
+  data?: unknown
+}
+
+export async function verifyMissionLocation(params: {
+  missionId: string
+  x: number | string
+  y: number | string
+}) {
+  const { missionId, x, y } = params
+  return api.post<SimpleResp>(`/puzzles/mission/${missionId}/location`, {
+    x: String(x),
+    y: String(y),
+  })
+}
+
+export async function createMissionRecord(params: {
+  missionId: string
+  score: number
+  content: string
+  images: File[]
+}) {
+  const { missionId, score, content, images } = params
+  const fd = new FormData()
+  fd.append('score', String(score))
+  fd.append('content', content)
+  images.forEach((f) => fd.append('images', f))
+
+  return api.post<SimpleResp>(`/puzzles/mission/${missionId}/record`, fd, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+}

@@ -12,6 +12,7 @@ import ThemeDetailPage from '@/pages/theme/ThemeDetailPage'
 import ThemeCreatePage from '@/pages/theme/ThemeCreatePage'
 import PuzzleMapPage from '@/pages/puzzle/PuzzleMapPage'
 import MissionDetailPage from '@/pages/puzzle/MissionDetailPage'
+import MissionRunPage from '@/pages/puzzle/MissionRunPage'
 
 export const router = createBrowserRouter([
   { path: '/', element: <HomePage /> },
@@ -26,5 +27,6 @@ export const router = createBrowserRouter([
   { path: '/theme/:themeId', element: <ThemeDetailPage /> },
   { path: '/theme/create', element: <ThemeCreatePage /> },
   { path: '/puzzle', element: <PuzzleMapPage /> },
-  { path: '/missions/:missionId', element: <MissionDetailPage /> },
+  { path: '/puzzle/:missionId', element: <MissionDetailPage /> },
+  { path: '/puzzle/:missionId/run', element: <MissionRunPage /> },
 ])

@@ -90,7 +90,7 @@ export default function PuzzleMapTab() {
                 key={m.missionId}
                 title={m.missionTitle}
                 desc={m.missionDescription}
-                onClick={() => navigate(`/missions/${m.missionId}`)}
+                onClick={() => navigate(`/puzzle/${m.missionId}`)}
                 completed={m.isCompleted}
               />
             ))}
@@ -125,24 +125,24 @@ function MissionItem({
 
   return (
     <button
-      onClick={completed ? undefined : onClick}
+      onClick={completed ? onClick : onClick}
       className={`${base} ${completed ? doneStyle : todoStyle}`}
       aria-pressed={completed}
       aria-disabled={completed}
     >
       <div
-        className={`w-[8px] ${completed ? 'bg-emerald-400/80' : 'bg-main'}`}
+        className={`w-[8px] ${completed ? 'bg-gray-40' : 'bg-main'}`}
         aria-hidden
       />
 
       <div className="flex-1 p-[15px] pr-[12px] text-left">
         <div
           className={`text-semi16 flex ${
-            completed ? 'text-gray-500 line-through' : 'text-gray-900'
+            completed ? 'text-gray-500' : 'text-gray-900'
           }`}
         >
           {title}
-          {completed ? (
+          {/* {completed ? (
             <span className="ml-[5px] inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11px] text-emerald-700">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
                 <path
@@ -160,7 +160,7 @@ function MissionItem({
               <span className="h-1.5 w-1.5 rounded-full bg-blue-600" />
               진행 가능
             </span>
-          )}
+          )} */}
         </div>
         <div
           className={`text-medium12 mt-1 ${
@@ -173,20 +173,7 @@ function MissionItem({
 
       <div className="flex items-center pr-[23px] text-[22px]">
         {completed ? (
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            className="text-emerald-600"
-          >
-            <path
-              d="M20 6L9 17l-5-5"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
+          <></>
         ) : (
           <span className="group-hover:text-main text-gray-500">›</span>
         )}

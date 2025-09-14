@@ -11,6 +11,10 @@ import {
 import { getMyProfile } from '@/features/my/model'
 
 export default function MyPage() {
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [])
+
   const [profile, setProfile] = useState<MyProfile>({
     name: '',
     email: '',

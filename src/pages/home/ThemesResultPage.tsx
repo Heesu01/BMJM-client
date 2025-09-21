@@ -84,7 +84,7 @@ export default function ThemeResultPage() {
   const count = themes.length
 
   const openTheme = (id: string) => {
-    navigate(`/recommend/theme/${id}`, { state })
+    navigate(`/theme/${id}`, { state })
   }
 
   return (

@@ -35,7 +35,7 @@ export default function ThemeAboutTab({ theme }: { theme: ThemeDetail }) {
           )}
 
           <div className="border-gray-20 mb-[20px] flex items-center justify-between rounded-full border bg-white px-[20px] py-[8px]">
-            <span className="text-medium14">{s.placeName}</span>
+            {/* <span className="text-medium14">{s.placeName}</span> */}
             <span className="text-medium12 text-gray-80 flex items-center gap-1">
               <Icon name="pin-solid" size={12} className="text-gray-80" />
               {s.address}

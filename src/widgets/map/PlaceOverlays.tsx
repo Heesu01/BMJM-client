@@ -192,7 +192,7 @@ export function NearbyListSheet({
             <button
               key={t.key}
               onClick={() => onTab(t.key)}
-              className={`rounded-full px-3 py-1 text-[13px] ${activeTab === t.key ? 'bg-main text-white' : 'border bg-white text-gray-900'}`}
+              className={`rounded-full px-3 py-1 text-[13px] ${activeTab === t.key ? 'bg-main text-white' : 'border-sub border bg-white text-gray-900'}`}
             >
               {t.label}
             </button>
@@ -234,7 +234,7 @@ export function NearbyListSheet({
             return (
               <div
                 key={p.id}
-                className="mx-2 mb-2 rounded-xl border bg-white p-3"
+                className="text-sub mx-2 mb-2 rounded-xl border bg-white p-3"
               >
                 <div className="mb-1 flex items-center justify-between">
                   <div className="text-[15px] font-medium text-black">
@@ -253,7 +253,7 @@ export function NearbyListSheet({
                 <div className="flex gap-2">
                   <button
                     onClick={() => onFocusItem(p)}
-                    className="flex-1 rounded-lg border px-3 py-2 text-[13px] font-medium text-black active:scale-[0.98]"
+                    className="border-gray-20 flex-1 rounded-lg border px-3 py-2 text-[13px] font-medium text-black active:scale-[0.98]"
                   >
                     지도에서 보기
                   </button>

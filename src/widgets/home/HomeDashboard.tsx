@@ -4,6 +4,7 @@ import { RecommendedByKeyword } from './RecommendedByKeyword'
 import { Top3List } from './Top3List'
 import { useHomeData } from '@/features/home/model'
 import { useNavigate } from 'react-router-dom'
+import FestivalWidget from './Festival/FestivalWidget'
 
 export default function HomeDashboard() {
   const isLoggedIn = !!localStorage.getItem('accessToken')
@@ -19,6 +20,7 @@ export default function HomeDashboard() {
       {isLoggedIn && <StartTripCTA />}
 
       <RecommendedByKeyword />
+      <FestivalWidget className="mt-[30px]" />
 
       <Top3List
         items={top3 ?? undefined}

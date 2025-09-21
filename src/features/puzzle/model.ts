@@ -277,3 +277,91 @@ export async function createMissionRecord(params: {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
 }
+
+export type Popularity = {
+  signguNm: string
+  avgCnctrRate: number
+  tatsNm?: string
+}
+
+type ConcentrationResp = {
+  statusCode: string
+  message: string
+  data: {
+    areaCd?: string
+    areaNm?: string
+    signguCd?: string
+    signguNm: string
+    avgCnctrRate: number
+    tatsNm?: string
+  }
+}
+
+export const BUSAN_SIGNGUS = [
+  '중구',
+  '서구',
+  '동구',
+  '영도구',
+  '부산진구',
+  '동래구',
+  '남구',
+  '북구',
+  '해운대구',
+  '사하구',
+  '금정구',
+  '강서구',
+  '연제구',
+  '수영구',
+  '사상구',
+  '기장군',
+] as const
+
+export function useBusanPopularity() {
+  const [data, setData] = useState<Popularity[] | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<Error | null>(null)
+
+  useEffect(() => {
+    let alive = true
+
+    ;(async () => {
+      setLoading(true)
+      try {
+        const results = await Promise.all(
+          BUSAN_SIGNGUS.map(async (signguNm) => {
+            try {
+              const res = await api.get<ConcentrationResp>(
+                '/api/tour/concentration',
+                {
+                  params: { signguNm },
+                },
+              )
+
+              const d = res.data.data
+              return {
+                signguNm: d.signguNm ?? signguNm,
+                avgCnctrRate: Number(d.avgCnctrRate ?? 0),
+                tatsNm: d.tatsNm,
+              } as Popularity
+            } catch (e) {
+              console.warn('Popularity fetch failed for', signguNm, e)
+              return { signguNm, avgCnctrRate: 0 }
+            }
+          }),
+        )
+
+        if (alive) setData(results)
+      } catch (e: unknown) {
+        if (alive) setError(e as Error)
+      } finally {
+        if (alive) setLoading(false)
+      }
+    })()
+
+    return () => {
+      alive = false
+    }
+  }, [])
+
+  return { data, loading, error }
+}

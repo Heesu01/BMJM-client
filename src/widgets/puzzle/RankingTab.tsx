@@ -115,13 +115,13 @@ function PodiumCard({
 }) {
   const avatarSize = size === 'md' ? 'h-[99px] w-[99px]' : 'h-[79px] w-[79px]'
   const badgeColor =
-    rank === 1 ? 'bg-[#FFD700]' : rank === 2 ? 'bg-[#CECECE]' : 'bg-[#CB8600]'
+    rank === 1 ? '' : rank === 2 ? 'bg-[#CECECE]' : 'bg-[#CB8600]'
 
   return (
     <div className="flex w-[110px] flex-col items-center">
       <div className="relative">
         {crown && (
-          <div className="absolute -top-5 left-[46px] -translate-x-1/2 text-2xl">
+          <div className="absolute -top-5 left-[50px] -translate-x-1/2 text-2xl">
             <FaCrown size={35} color="#FFD600" />
           </div>
         )}
@@ -132,7 +132,7 @@ function PodiumCard({
           className={`${avatarSize} rounded-full object-cover shadow`}
         />
 
-        <div className="absolute -top-2.5 left-1/3">
+        <div className="absolute -top-2.5 left-[calc(1/2*100%)] -translate-x-1/2">
           <div
             className={`${badgeColor} flex h-[24px] w-[24px] items-center justify-center rounded-full text-[12px] text-white`}
           >

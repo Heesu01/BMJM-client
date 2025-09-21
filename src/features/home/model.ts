@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { api } from '@/shared/api/client'
 
 export type HomeProgress = {
@@ -169,4 +169,105 @@ export async function fetchThemesByKeyword(
     title: t.title,
     imageUrl: pickOneImage(t.mainImageUrls, t.mainImageUrl),
   }))
+}
+
+// 행사/축제
+export const DISTRICTS = [
+  { code: '1', name: '강서구' },
+  { code: '2', name: '금정구' },
+  { code: '3', name: '기장군' },
+  { code: '4', name: '남구' },
+  { code: '5', name: '동구' },
+  { code: '6', name: '동래구' },
+  { code: '7', name: '부산진구' },
+  { code: '8', name: '북구' },
+  { code: '9', name: '사상구' },
+  { code: '10', name: '사하구' },
+  { code: '11', name: '서구' },
+  { code: '12', name: '수영구' },
+  { code: '13', name: '연제구' },
+  { code: '14', name: '영도구' },
+  { code: '15', name: '중구' },
+  { code: '16', name: '해운대구' },
+] as const
+export type District = (typeof DISTRICTS)[number]
+
+export type FestivalItem = {
+  address: string
+  mapX: string
+  mapY: string
+  firstImage?: string
+  tel?: string
+  title: string
+  eventStartDate: string
+  eventEndDate: string
+}
+
+type FestivalResp = {
+  statusCode: string
+  message: string
+  data: FestivalItem[]
+}
+
+export function fmtYMD(s: string) {
+  return s?.length === 8
+    ? `${s.slice(0, 4)}.${s.slice(4, 6)}.${s.slice(6, 8)}`
+    : s
+}
+
+export async function fetchFestivalList(
+  code: string,
+  year: number = 2025,
+): Promise<FestivalItem[]> {
+  const { data } = await api.get<FestivalResp>('/api/tour/festival', {
+    params: { year, code },
+  })
+  return data.data ?? []
+}
+
+const _festivalCache = new Map<string, FestivalItem[]>()
+
+export function useFestival(code: string | null, year: number = 2025) {
+  const [data, setData] = useState<FestivalItem[] | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<unknown>(null)
+
+  useEffect(() => {
+    if (!code) return
+    const key = `${year}:${code}`
+
+    if (_festivalCache.has(key)) {
+      setData(_festivalCache.get(key)!)
+      setLoading(false)
+      setError(null)
+      return
+    }
+
+    const ctrl = new AbortController()
+    ;(async () => {
+      try {
+        setLoading(true)
+        setError(null)
+        const list = await fetchFestivalList(code, year)
+        if (ctrl.signal.aborted) return
+        _festivalCache.set(key, list)
+        setData(list)
+      } catch (e) {
+        if (!ctrl.signal.aborted) setError(e)
+      } finally {
+        if (!ctrl.signal.aborted) setLoading(false)
+      }
+    })()
+
+    return () => ctrl.abort()
+  }, [code, year])
+
+  const sorted = useMemo(() => {
+    if (!data) return null
+    return [...data].sort((a, b) =>
+      a.eventStartDate.localeCompare(b.eventStartDate),
+    )
+  }, [data])
+
+  return { data: sorted, loading, error }
 }

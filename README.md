@@ -1,69 +1,80 @@
-# React + TypeScript + Vite
+# 부먹찍먹  
+> 2025 관광데이터 활용 공모전 출품작  <br/>
+> *퍼즐맵, 테마 추천, 지도 탐색, 후기·배지 시스템으로 즐기는 부산 맛집·여행 플랫폼*  
+<br/>
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🔍 프로젝트 개요  
+<img width="3840" height="2160" alt="image" src="https://github.com/user-attachments/assets/e0af0aea-6f71-4909-bf4b-e52df056d2e3" />
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
-## Expanding the ESLint configuration
+**‘부먹찍먹’** 은 “먹고, 찍고, 즐긴다”를 키워드로 부산의 맛집과 관광지를 미션처럼 탐험하고 기록하며 나만의 여행 다이어리를 완성할 수 있는 플랫폼입니다.  
+공식·유저 테마, 퍼즐맵 기반 미션, 지도 탐색, 후기·배지 기능을 통해 **재미있고 직관적인 부산 여행 경험**을 제공합니다.  
+<br/>
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🛠 주요 기능  
 
-```js
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| 기능 | 설명 |
+|------|------|
+| 🎯 취향 기반 테마 추천 | 여행 목적·음식 취향 키워드 선택 → 개인 맞춤 테마 추천 |
+| 🗺️ 찍먹 지도 | Kakao Maps API 연동, ‘찍’(관광지)/‘먹’(맛집) 마커 구분 표시 |
+| 🧩 퍼즐맵 | 구 단위 미션 수행 → GPS·사진·후기 인증 후 퍼즐 조각 수집 |
+| 📝 테마 탐색 | 공식·유저 테마 조회 및 상세 설명/후기/댓글 커뮤니티 |
+| 🏆 배지 & 랭킹 | 미션 완료 시 배지 획득, 유저 간 랭킹 경쟁 |
+| 👤 마이페이지 | 후기·스크랩·획득 배지 관리 및 대표 배지 설정 |
 
-      // Remove tseslint.configs.recommended and replace with this
-      ...tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      ...tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      ...tseslint.configs.stylisticTypeChecked,
+<br/>
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 📈 기대 효과  
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+- **지역 관광 불균형 해소**: 덜 알려진 구별 명소까지 탐방 유도  
+- **게임화된 여행 경험**: 퍼즐맵·랭킹·배지로 성취감 제공, 재방문 의도 강화  
+- **신뢰성 높은 정보 제공**: TourAPI + 후기 기반 큐레이션으로 데이터 신뢰도 확보  
+- **확장성**: 지역 상점 제휴(쿠폰·스탬프), GPT 챗봇 여행 컨시어지, 다국어 지원으로 글로벌 관광객 유입 확대  
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+<br/>
 
-export default tseslint.config([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## 🧩 활용 데이터  
+
+| 출처 | 활용 목적 |
+|------|------------|
+| 한국관광공사 TourAPI (관광정보/축제/사진) | 관광지·축제 실시간 조회 및 사진 제공 |
+| 한국관광공사 방문자 추이 데이터 | 퍼즐맵 집중률/트렌드 분석 |
+| Kakao Maps API | 지도 UI, 주변 맛집/관광지 탐색 |
+| Kakao OAuth API | 소셜 로그인 기능 제공 |
+
+<br/>
+
+## 🤖 기술 스택  
+
+- **Frontend**: React.js, TypeScript, Tailwind CSS
+- **상태 관리·비동기**: Axios, React Query, React Router  
+- **API 연동**: Kakao Maps API, Kakao OAuth, TourAPI  
+- **CI/CD**: Netlify 배포, GitHub
+- **디자인/개발 협업**: Figma, Storybook, FSD 아키텍처  
+
+<br/>
+
+## 🧪 프로젝트 회고  
+
+- **사용자 경험 중심 설계**: 미션·퍼즐맵·배지 등 게임화 요소로 재미와 직관성 확보  
+- **스토리북 도입**: UI 컴포넌트를 독립적으로 개발·테스트하여 재사용성과 협업 효율성 향상  
+- **FSD 아키텍처 적용**: 기능 단위 구조로 유지보수성과 확장성 강화  
+- **공공데이터 활용 경험**: TourAPI로 신뢰성 있는 관광/맛집 데이터 연동  
+- **제한된 기간 내 핵심 기능 구현**: 대회 환경에서 MVP를 완성하며 협업 효율 극대화  
+
+<br/>
+
+## 📸 서비스 화면  
+
+- 홈 & 추천 테마  
+- 테마 상세 & 유저 테마  
+- 퍼즐맵 진행 현황 & 미션 인증  
+- 찍먹 지도(‘찍’ 관광지, ‘먹’ 맛집)  
+- 마이페이지 & 배지 관리  
+
+<br/>
+
+## 🔗 서비스 링크  
+[https://bumeok-jjikmeok.com/](https://bumeok-jjikmeok.com/)
+

@@ -10,9 +10,12 @@ api.defaults.headers.common['Accept'] = 'application/json'
 export function setAuthToken(token: string | null) {
   if (token) {
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`
+    localStorage.setItem('accessToken', token)
   } else {
     delete api.defaults.headers.common['Authorization']
+    localStorage.removeItem('accessToken')
   }
+  window.dispatchEvent(new Event('auth:changed'))
 }
 
 type ErrorBody = { code?: string; message?: string } | undefined
@@ -35,10 +38,15 @@ function toApiError(err: unknown): ApiError {
   }
   return { status: 0, message: 'Unknown error', raw: err }
 }
-
 api.interceptors.response.use(
   (res) => res,
-  (err) => Promise.reject(toApiError(err)),
+  (err) => {
+    const apiErr = toApiError(err)
+    if ([401, 404].includes(apiErr.status)) {
+      setAuthToken(null)
+    }
+    return Promise.reject(apiErr)
+  },
 )
 
 const boot = localStorage.getItem('accessToken')

@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+// import { useNavigate } from 'react-router-dom'
 import { FiCalendar, FiMapPin } from 'react-icons/fi'
 import { DISTRICTS, useFestival, fmtYMD } from '@/features/home/model'
 
@@ -29,7 +29,7 @@ const RANK: Record<string, number> = POPULAR_ORDER.reduce(
 )
 
 export default function FestivalWidget({ className = '' }: Props) {
-  const navigate = useNavigate()
+  // const navigate = useNavigate()
   const [selected, setSelected] = useState<string>('16')
 
   const kwList = useMemo(() => {
@@ -76,7 +76,7 @@ export default function FestivalWidget({ className = '' }: Props) {
             items!.map((f, idx) => (
               <article
                 key={`${f.title}-${f.eventStartDate}-${idx}`}
-                onClick={() => navigate('/festival')}
+                // onClick={() => navigate('/festival')}
                 className="relative h-full w-[220px] shrink-0 snap-start overflow-hidden rounded-[20px] bg-white"
               >
                 <div className="relative h-[128px] w-full cursor-pointer">

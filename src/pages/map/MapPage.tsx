@@ -9,7 +9,7 @@ import { BottomTabBar } from '@/shared/BottomTabBar'
 import { BiCurrentLocation } from 'react-icons/bi'
 import { PlacePreviewCard, NearbyListSheet } from '@/widgets/map/PlaceOverlays'
 
-const DEFAULT_CENTER = { lat: 35.101, lng: 129.034 }
+const DEFAULT_CENTER = { lat: 35.1587, lng: 129.1604 }
 const CAT: Record<'food' | 'spot', 'FD6' | 'AT4'> = { food: 'FD6', spot: 'AT4' }
 
 type TabKey = 'all' | 'food' | 'spot'
@@ -74,41 +74,41 @@ export default function MapPage() {
   })
 
   // 현재 위치 1회
-  useEffect(() => {
-    if (!('geolocation' in navigator)) return
-    navigator.geolocation.getCurrentPosition(
-      (pos) => {
-        const loc = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-          accuracy: pos.coords.accuracy,
-        }
-        setCenter(loc)
-        setMyLoc(loc)
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 7000, maximumAge: 0 },
-    )
-  }, [])
+  // useEffect(() => {
+  //   if (!('geolocation' in navigator)) return
+  //   navigator.geolocation.getCurrentPosition(
+  //     (pos) => {
+  //       const loc = {
+  //         lat: pos.coords.latitude,
+  //         lng: pos.coords.longitude,
+  //         accuracy: pos.coords.accuracy,
+  //       }
+  //       setCenter(loc)
+  //       setMyLoc(loc)
+  //     },
+  //     () => {},
+  //     { enableHighAccuracy: true, timeout: 7000, maximumAge: 0 },
+  //   )
+  // }, [])
 
   // 실시간 위치 추적
-  useEffect(() => {
-    if (!('geolocation' in navigator)) return
-    const id = navigator.geolocation.watchPosition(
-      (pos) => {
-        const loc = {
-          lat: pos.coords.latitude,
-          lng: pos.coords.longitude,
-          accuracy: pos.coords.accuracy,
-        }
-        setMyLoc(loc)
-        setCenter(loc)
-      },
-      () => {},
-      { enableHighAccuracy: true, timeout: 8000, maximumAge: 5000 },
-    )
-    return () => navigator.geolocation.clearWatch(id)
-  }, [])
+  // useEffect(() => {
+  //   if (!('geolocation' in navigator)) return
+  //   const id = navigator.geolocation.watchPosition(
+  //     (pos) => {
+  //       const loc = {
+  //         lat: pos.coords.latitude,
+  //         lng: pos.coords.longitude,
+  //         accuracy: pos.coords.accuracy,
+  //       }
+  //       setMyLoc(loc)
+  //       setCenter(loc)
+  //     },
+  //     () => {},
+  //     { enableHighAccuracy: true, timeout: 8000, maximumAge: 5000 },
+  //   )
+  //   return () => navigator.geolocation.clearWatch(id)
+  // }, [])
 
   // 카카오 Places 검색
   useEffect(() => {
@@ -326,6 +326,7 @@ export default function MapPage() {
           kakaoNS.maps.event.addListener(map, 'idle', () =>
             setIdleTick((t) => t + 1),
           )
+          setIdleTick((t) => t + 1)
         }}
         onMarkerClick={(id) => {
           const p = placeDictRef.current.get(id)
@@ -397,7 +398,7 @@ export default function MapPage() {
             },
           )
         }}
-        className="text-main absolute right-[20px] bottom-[150px] z-10 h-[44px] w-[44px] rounded-full bg-white p-3 shadow"
+        className="text-main absolute right-[20px] bottom-[150px] z-1 h-[44px] w-[44px] rounded-full bg-white p-3 shadow"
       >
         <BiCurrentLocation size={20} />
       </button>

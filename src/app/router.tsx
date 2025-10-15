@@ -7,6 +7,7 @@ import MapPage from '@/pages/map/MapPage'
 import PlaceDetailPage from '@/pages/map/PlaceDetailPage'
 import MyPage from '@/pages/my/MyPage'
 import BadgesPage from '@/pages/my/BadgesPage'
+import MyScrapsPage from '@/pages/my/MyScrapsPage'
 import ThemePage from '@/pages/theme/ThemePage'
 import ThemeDetailPage from '@/pages/theme/ThemeDetailPage'
 import ThemeCreatePage from '@/pages/theme/ThemeCreatePage'
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
   { path: '/map/:placeId', element: <PlaceDetailPage /> },
   { path: '/my', element: <MyPage /> },
   { path: '/my/badges', element: <BadgesPage /> },
+  { path: '/my/scrap', element: <MyScrapsPage /> },
   { path: '/theme', element: <ThemePage /> },
   { path: '/theme/:themeId', element: <ThemeDetailPage /> },
   { path: '/theme/create', element: <ThemeCreatePage /> },

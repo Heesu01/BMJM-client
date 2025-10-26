@@ -5,9 +5,10 @@ import { Top3List } from './Top3List'
 import { useHomeData } from '@/features/home/model'
 import { useNavigate } from 'react-router-dom'
 import FestivalWidget from './Festival/FestivalWidget'
+import { useIsLoggedIn } from '@/shared/hooks/useIsLoggedIn'
 
 export default function HomeDashboard() {
-  const isLoggedIn = !!localStorage.getItem('accessToken')
+  const isLoggedIn = useIsLoggedIn()
 
   const { progress, top3 } = useHomeData(isLoggedIn)
 

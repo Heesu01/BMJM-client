@@ -77,7 +77,7 @@ export default function RankingTab({ users, isLoading }: Props) {
         )}
       </div>
 
-      <div className="mt-6 space-y-[10px] bg-[#f9f9f9] pt-[20px] pb-[87px]">
+      <div className="mt-6 min-h-[600px] space-y-[10px] bg-[#f9f9f9] pt-[20px] pb-[87px]">
         {rest.length === 0 ? (
           <div className="px-4 py-10 text-center text-sm text-gray-400">
             상위 {topCount}명 외 랭커가 아직 없어요.

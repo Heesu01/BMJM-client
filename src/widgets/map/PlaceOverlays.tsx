@@ -1,15 +1,39 @@
 import { useEffect, useState } from 'react'
 import { IoIosCall } from 'react-icons/io'
 import { MdLocationOn } from 'react-icons/md'
+import { api } from '@/shared/api/client'
 
 type TabKey = 'all' | 'food' | 'spot'
 
 interface AddressResult {
-  address: {
-    address_name: string
-  }
-  road_address?: {
-    address_name: string
+  address: { address_name: string }
+  road_address?: { address_name: string }
+}
+
+type TourGalleryItem = {
+  contentId: string
+  title: string
+  imageUrl: string
+  photographyMonth?: string
+  photographyLocation?: string
+  photographer?: string
+  searchKeyword?: string
+}
+type ApiResp<T> = { statusCode: string; message: string; data: T }
+
+async function fetchFirstGalleryImage(
+  title: string,
+  signal?: AbortSignal,
+): Promise<string | null> {
+  try {
+    const res = await api.get<ApiResp<TourGalleryItem[]>>('/api/tour/gallery', {
+      params: { title },
+      signal,
+    })
+    const url = res.data?.data?.find((d) => d.imageUrl)?.imageUrl
+    return url ?? null
+  } catch {
+    return null
   }
 }
 
@@ -46,6 +70,10 @@ export function PlacePreviewCard({
   const initialAddress = place.road_address_name ?? place.address_name ?? ''
   const [address, setAddress] = useState(initialAddress)
 
+  const [imgUrl, setImgUrl] = useState<string | null>(null)
+  const [imgLoading, setImgLoading] = useState(false)
+  const [imgError, setImgError] = useState(false)
+
   useEffect(() => {
     setAddress(initialAddress)
     if (initialAddress) return
@@ -66,6 +94,21 @@ export function PlacePreviewCard({
     )
   }, [place.id, initialAddress, lat, lng])
 
+  useEffect(() => {
+    const ac = new AbortController()
+    setImgUrl(null)
+    setImgError(false)
+
+    if (name) {
+      setImgLoading(true)
+      fetchFirstGalleryImage(name, ac.signal)
+        .then((url) => setImgUrl(url))
+        .catch(() => setImgError(true))
+        .finally(() => setImgLoading(false))
+    }
+    return () => ac.abort()
+  }, [name])
+
   const phone = place.phone
 
   const distText = (() => {
@@ -85,8 +128,22 @@ export function PlacePreviewCard({
       style={{ bottom: anchorBottomPx }}
     >
       <div className="overflow-hidden rounded-2xl bg-white shadow-xl ring-1 ring-black/5">
-        <div className="grid h-[120px] w-full place-items-center bg-gradient-to-br from-gray-100 to-gray-200">
-          <span className="text-sm text-gray-500">이미지 없음</span>
+        <div className="h-[120px] w-full overflow-hidden bg-gray-100">
+          {imgUrl && !imgError ? (
+            <img
+              src={imgUrl}
+              alt={`${name} 사진`}
+              className="h-full w-full object-cover"
+              loading="lazy"
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="grid h-full w-full place-items-center bg-gradient-to-br from-gray-100 to-gray-200">
+              <span className="text-sm text-gray-500">
+                {imgLoading ? '이미지 불러오는 중…' : '이미지 없음'}
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="p-4">

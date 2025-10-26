@@ -104,7 +104,11 @@ export default function MissionDetailBody({
                   >
                     {i + 1}
                   </span>
-                  <span className={tone.stepText}>{line}</span>
+                  <span
+                    className={`${tone.stepText} min-w-0 flex-1 break-words break-all whitespace-pre-wrap`}
+                  >
+                    {line}
+                  </span>
                 </li>
               ))}
             </ol>

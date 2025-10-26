@@ -6,6 +6,8 @@ import {
   useRegionMissions,
   useBusanPopularity,
 } from '@/features/puzzle/model'
+import { useIsLoggedIn } from '@/shared/hooks/useIsLoggedIn'
+import { FiLock } from 'react-icons/fi'
 
 function popularityToColor(p?: number) {
   if (p == null) return '#E5E7EB'
@@ -14,8 +16,42 @@ function popularityToColor(p?: number) {
   return `hsl(${hue}deg 85% 55%)`
 }
 
-export default function PuzzleMapTab() {
+function PuzzleMapGuest() {
   const navigate = useNavigate()
+  return (
+    <div className="flex items-center justify-center px-[20px] pb-[85px]">
+      <div className="w-[min(560px,100%)] rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+        <div className="flex items-start gap-3">
+          <div className="from-main/90 to-main/60 grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br text-white">
+            <FiLock size={18} />
+          </div>
+          <div className="flex-1">
+            <p className="text-[16px] font-semibold">로그인이 필요해요</p>
+            <p className="mt-[4px] text-[13px] leading-relaxed text-gray-600">
+              부산 퍼즐 지도와 미션 진행도 확인은 로그인 후 이용할 수 있어요.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/login')}
+              className="bg-main mt-4 h-[44px] w-full rounded-lg text-[14px] font-semibold text-white active:scale-[0.98]"
+            >
+              로그인하러 가기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default function PuzzleMapTab() {
+  const isLoggedIn = useIsLoggedIn()
+  return isLoggedIn ? <PuzzleMapAuthed /> : <PuzzleMapGuest />
+}
+
+function PuzzleMapAuthed() {
+  const navigate = useNavigate()
+
   const { data, byRegion, loading, completedCount } = usePuzzleMapProgress()
   const [selectedRegion, setSelectedRegion] = useState<string | null>(null)
   const [view, setView] = useState<'table' | 'chart'>('table')
@@ -27,9 +63,6 @@ export default function PuzzleMapTab() {
   }, [selectedRegion, data])
 
   const current = defaultRegion ? byRegion[defaultRegion] : undefined
-  const { data: missionData, loading: missionsLoading } = useRegionMissions(
-    current?.puzzleId,
-  )
 
   const collected = current?.collectedMissionCount ?? 0
   const total = current?.totalMissionCount ?? 0
@@ -116,30 +149,23 @@ export default function PuzzleMapTab() {
         </div>
       </div>
 
-      <div className="px-[20px] pb-[85px]">
-        <div className="text-semi16 mt-[20px]">
-          ‘{defaultRegion ?? ''}’ 관련 미션
-        </div>
-        {missionsLoading || loading ? (
-          <div className="px-4 py-6 text-sm text-gray-500">불러오는 중…</div>
-        ) : missionData && missionData.missions.length > 0 ? (
-          <div className="mt-[10px] flex flex-col gap-[10px]">
-            {missionData.missions.map((m) => (
-              <MissionItem
-                key={m.missionId}
-                title={m.missionTitle}
-                desc={m.missionDescription}
-                onClick={() => navigate(`/puzzle/${m.missionId}`)}
-                completed={m.isCompleted}
-              />
-            ))}
+      {current?.puzzleId ? (
+        <RegionMissionsPanel
+          titleRegion={defaultRegion ?? ''}
+          puzzleId={current.puzzleId}
+          loadingOuter={loading}
+          onClickMission={(id) => navigate(`/puzzle/${id}`)}
+        />
+      ) : (
+        <div className="px-[20px] pb-[85px]">
+          <div className="text-semi16 mt-[20px]">
+            ‘{defaultRegion ?? ''}’ 관련 미션
           </div>
-        ) : (
           <div className="px-4 py-6 text-sm text-gray-400">
             등록된 미션이 없습니다.
           </div>
-        )}
-      </div>
+        </div>
+      )}
 
       {openModal && (
         <>
@@ -210,80 +236,37 @@ export default function PuzzleMapTab() {
                         <span>높음</span>
                       </div>
 
-                      {view === 'table' ? (
-                        <div className="max-h-[50vh] overflow-auto rounded-xl border border-gray-100">
-                          <table className="w-full text-sm">
-                            <thead className="sticky top-0 bg-white">
-                              <tr className="text-left text-gray-500">
-                                <th className="w-12 px-3 py-2">#</th>
-                                <th className="px-3 py-2">구·군</th>
-                                <th className="w-24 px-3 py-2 text-right">
-                                  집중률
-                                </th>
-                                <th className="px-3 py-2">미니바</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {sorted.map((d, i) => (
-                                <tr
-                                  key={d.signguNm}
-                                  className="cursor-pointer border-t border-gray-50 hover:bg-gray-50"
-                                  onClick={() => handlePickRegion(d.signguNm)}
-                                  title={`${d.signguNm} ${d.avgCnctrRate.toFixed(1)}%`}
-                                >
-                                  <td className="px-3 py-2 text-gray-500">
-                                    {i + 1}
-                                  </td>
-                                  <td className="px-3 py-2">{d.signguNm}</td>
-                                  <td className="px-3 py-2 text-right font-medium tabular-nums">
-                                    {d.avgCnctrRate.toFixed(1)}%
-                                  </td>
-                                  <td className="px-3 py-2">
-                                    <div className="h-2 w-full rounded-full bg-gray-100">
-                                      <div
-                                        className="h-2 rounded-full transition-all"
-                                        style={{
-                                          width: `${(d.avgCnctrRate / max) * 100}%`,
-                                          background: popularityToColor(
-                                            d.avgCnctrRate,
-                                          ),
-                                        }}
-                                        aria-label={`${d.signguNm} 집중률 ${d.avgCnctrRate.toFixed(1)}%`}
-                                      />
-                                    </div>
-                                  </td>
-                                </tr>
-                              ))}
-                            </tbody>
-                          </table>
-                        </div>
-                      ) : (
-                        <div className="max-h-[52vh] overflow-auto">
-                          <ul className="space-y-2">
+                      <div className="max-h-[50vh] overflow-auto rounded-xl border border-gray-100">
+                        <table className="w-full text-sm">
+                          <thead className="sticky top-0 bg-white">
+                            <tr className="text-left text-gray-500">
+                              <th className="w-12 px-3 py-2">#</th>
+                              <th className="px-3 py-2">구·군</th>
+                              <th className="w-24 px-3 py-2 text-right">
+                                집중률
+                              </th>
+                              <th className="px-3 py-2">미니바</th>
+                            </tr>
+                          </thead>
+                          <tbody>
                             {sorted.map((d, i) => (
-                              <li key={d.signguNm}>
-                                <button
-                                  type="button"
-                                  onClick={() => handlePickRegion(d.signguNm)}
-                                  className="w-full rounded-lg border border-gray-100 bg-white p-2 text-left hover:bg-gray-50"
-                                  title={`${d.signguNm} ${d.avgCnctrRate.toFixed(1)}%`}
-                                >
-                                  <div className="mb-1 flex items-center justify-between text-xs text-gray-600">
-                                    <span className="flex items-center gap-2">
-                                      <span className="w-5 text-right">
-                                        {i + 1}
-                                      </span>
-                                      <span className="font-medium text-gray-800">
-                                        {d.signguNm}
-                                      </span>
-                                    </span>
-                                    <span className="tabular-nums">
-                                      {d.avgCnctrRate.toFixed(1)}%
-                                    </span>
-                                  </div>
-                                  <div className="h-3 w-full rounded-full bg-gray-100">
+                              <tr
+                                key={d.signguNm}
+                                className="cursor-pointer border-t border-gray-50 hover:bg-gray-50"
+                                onClick={() => handlePickRegion(d.signguNm)}
+                                title={`${d.signguNm} ${d.avgCnctrRate.toFixed(1)}%`}
+                              >
+                                <td className="px-3 py-2 text-gray-500">
+                                  {i + 1}
+                                </td>
+                                <td className="px-3 py-2">{d.signguNm}</td>
+                                <td className="px-3 py-2 text-right font-medium tabular-nums">
+                                  {d.avgCnctrRate.toFixed(1)}%
+                                </td>
+                                <td className="px-3 py-2">
+                                  <div className="h-2 w-full rounded-full bg-gray-100">
                                     <div
-                                      className="h-3 rounded-full transition-all"
+                                      className="h-2 rounded-full transition-all"
                                       style={{
                                         width: `${(d.avgCnctrRate / max) * 100}%`,
                                         background: popularityToColor(
@@ -293,12 +276,12 @@ export default function PuzzleMapTab() {
                                       aria-label={`${d.signguNm} 집중률 ${d.avgCnctrRate.toFixed(1)}%`}
                                     />
                                   </div>
-                                </button>
-                              </li>
+                                </td>
+                              </tr>
                             ))}
-                          </ul>
-                        </div>
-                      )}
+                          </tbody>
+                        </table>
+                      </div>
                     </>
                   )
                 })()
@@ -306,6 +289,46 @@ export default function PuzzleMapTab() {
             </div>
           </div>
         </>
+      )}
+    </div>
+  )
+}
+
+function RegionMissionsPanel({
+  titleRegion,
+  puzzleId,
+  loadingOuter,
+  onClickMission,
+}: {
+  titleRegion: string
+  puzzleId: string
+  loadingOuter: boolean
+  onClickMission: (id: string) => void
+}) {
+  const { data: missionData, loading: missionsLoading } =
+    useRegionMissions(puzzleId)
+
+  return (
+    <div className="px-[20px] pb-[85px]">
+      <div className="text-semi16 mt-[20px]">‘{titleRegion}’ 관련 미션</div>
+      {missionsLoading || loadingOuter ? (
+        <div className="px-4 py-6 text-sm text-gray-500">불러오는 중…</div>
+      ) : missionData && missionData.missions.length > 0 ? (
+        <div className="mt-[10px] flex flex-col gap-[10px]">
+          {missionData.missions.map((m) => (
+            <MissionItem
+              key={m.missionId}
+              title={m.missionTitle}
+              desc={m.missionDescription}
+              onClick={() => onClickMission(m.missionId)}
+              completed={m.isCompleted}
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="px-4 py-6 text-sm text-gray-400">
+          등록된 미션이 없습니다.
+        </div>
       )}
     </div>
   )

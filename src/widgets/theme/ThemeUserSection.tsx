@@ -8,6 +8,7 @@ import {
   type OfficialThemeAPI as UserThemeAPI,
   type ServerKeyword,
 } from '@/features/theme/model'
+import { useIsLoggedIn } from '@/shared/hooks/useIsLoggedIn'
 
 type Props = {
   className?: string
@@ -18,6 +19,7 @@ const getErrorMessage = (e: unknown) =>
 
 export default function ThemeUserSection({ className = '' }: Props) {
   const navigate = useNavigate()
+  const isLoggedIn = useIsLoggedIn()
 
   const kwList = THEME_KEYWORDS
   const [selected, setSelected] = useState<ThemeKeyword>(kwList[0].value)
@@ -127,7 +129,6 @@ export default function ThemeUserSection({ className = '' }: Props) {
                           className="opacity-80"
                           aria-hidden
                         />
-
                         <span>{it.viewCount}</span>
                       </span>
                     </div>
@@ -139,19 +140,23 @@ export default function ThemeUserSection({ className = '' }: Props) {
           })}
 
         {!loading && !error && items.length === 0 && (
-          <div className="text-medium14 py-6 text-gray-500">
-            유저 테마가 없습니다.
+          <div className="text-medium14 py-6 text-center text-gray-500">
+            {isLoggedIn
+              ? '아직 등록된 테마가 없어요. 나만의 테마를 직접 만들어보세요!'
+              : '아직 등록된 테마가 없어요. 로그인 후 참여해보세요!'}
           </div>
         )}
       </div>
 
-      <button
-        onClick={() => navigate('/theme/create')}
-        aria-label="유저 테마 작성"
-        className="text-main fixed right-[20px] bottom-[107px] grid h-12 w-12 place-items-center rounded-full bg-white shadow-lg"
-      >
-        <BsPencilSquare />
-      </button>
+      {isLoggedIn && (
+        <button
+          onClick={() => navigate('/theme/create')}
+          aria-label="유저 테마 작성"
+          className="text-main fixed right-[20px] bottom-[107px] grid h-12 w-12 place-items-center rounded-full bg-white shadow-lg"
+        >
+          <BsPencilSquare />
+        </button>
+      )}
     </section>
   )
 }

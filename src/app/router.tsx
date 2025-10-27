@@ -8,6 +8,7 @@ import PlaceDetailPage from '@/pages/map/PlaceDetailPage'
 import MyPage from '@/pages/my/MyPage'
 import BadgesPage from '@/pages/my/BadgesPage'
 import MyScrapsPage from '@/pages/my/MyScrapsPage'
+import MyReviewsPage from '@/pages/my/MyReviewsPage'
 import ThemePage from '@/pages/theme/ThemePage'
 import ThemeDetailPage from '@/pages/theme/ThemeDetailPage'
 import ThemeCreatePage from '@/pages/theme/ThemeCreatePage'
@@ -25,6 +26,7 @@ export const router = createBrowserRouter([
   { path: '/my', element: <MyPage /> },
   { path: '/my/badges', element: <BadgesPage /> },
   { path: '/my/scrap', element: <MyScrapsPage /> },
+  { path: '/my/reviews', element: <MyReviewsPage /> },
   { path: '/theme', element: <ThemePage /> },
   { path: '/theme/:themeId', element: <ThemeDetailPage /> },
   { path: '/theme/create', element: <ThemeCreatePage /> },

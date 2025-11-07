@@ -1,5 +1,5 @@
 # 부먹찍먹  
-> 2025 관광데이터 활용 공모전 출품작  <br/>
+> 2025 관광데이터 활용 공모전 장려상 수상작  <br/>
 > *퍼즐맵, 테마 추천, 지도 탐색, 후기·배지 시스템으로 즐기는 부산 맛집·여행 플랫폼*  
 <br/>
 
@@ -22,6 +22,41 @@
 | 📝 테마 탐색 | 공식·유저 테마 조회 및 상세 설명/후기/댓글 커뮤니티 |
 | 🏆 배지 & 랭킹 | 미션 완료 시 배지 획득, 유저 간 랭킹 경쟁 |
 | 👤 마이페이지 | 후기·스크랩·획득 배지 관리 및 대표 배지 설정 |
+
+
+### 1. 대시보드
+: 오늘의 추천 루트, 인기 맛집, 진행도 및 활동 뱃지를 한눈에 보여주는 대시보드
+<div align="center">
+  <img width="1349" height="759" alt="스크린샷 2025-09-23 오후 5 23 01" src="https://github.com/user-attachments/assets/c6f6fb07-b5b4-48b1-a61d-71ba5f5e9185" />
+</div>
+</br>
+
+### 2. 테마
+: 지역·취향 기반 여행 루트를 제공하고 사용자도 직접 테마를 만들 수 있는 공간
+<div align="center">
+  <img width="1349" height="755" alt="스크린샷 2025-09-23 오후 5 23 18" src="https://github.com/user-attachments/assets/950d2442-a4aa-4bea-bea6-32ddfe5f0cea" />
+</div>
+</br>
+
+### 3. 퍼즐맵
+: 구별 미션 수행으로 퍼즐을 완성하고, 뱃지와 랭킹으로 성취감을 높이는 시스템
+<div align="center">
+  <img width="1348" height="758" alt="스크린샷 2025-09-23 오후 5 23 47" src="https://github.com/user-attachments/assets/27e34d01-e3d8-4f06-8732-6872d61354b5" />
+</div>
+</br>
+
+### 4. 지도
+: GPS 기반 위치 탐색과 카카오맵 연동으로 맛집·관광지를 쉽게 찾을 수 있는 지도
+<div align="center">
+  <img width="1350" height="759" alt="스크린샷 2025-09-23 오후 5 23 33" src="https://github.com/user-attachments/assets/a7fa6d05-4b43-496c-bc47-e0d9cc693f57" />
+</div>
+</br>
+
+### 5. 마이페이지
+: 후기, 스크랩, 뱃지 등 나의 여행 활동을 기록하고 시각화하는 개인 공간
+<div align="center">
+  <img width="1351" height="758" alt="스크린샷 2025-09-23 오후 5 24 02" src="https://github.com/user-attachments/assets/e8ff8067-e271-472b-a1ff-9c466143a5c5" />
+</div>
 
 <br/>
 
@@ -63,18 +98,4 @@
 - **공공데이터 활용 경험**: TourAPI로 신뢰성 있는 관광/맛집 데이터 연동  
 - **제한된 기간 내 핵심 기능 구현**: 대회 환경에서 MVP를 완성하며 협업 효율 극대화  
 
-<br/>
-
-## 📸 서비스 화면  
-
-- 홈 & 추천 테마  
-- 테마 상세 & 유저 테마  
-- 퍼즐맵 진행 현황 & 미션 인증  
-- 찍먹 지도(‘찍’ 관광지, ‘먹’ 맛집)  
-- 마이페이지 & 배지 관리  
-
-<br/>
-
-## 🔗 서비스 링크  
-[https://bumeok-jjikmeok.com/](https://bumeok-jjikmeok.com/)
 
